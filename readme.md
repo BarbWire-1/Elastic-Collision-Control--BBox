@@ -1,7 +1,9 @@
 ## Proof-Of-Concept
 
-Handling simplified elastic collison in HTML 2D Canvas
+# Simplified elastic collison in HTML 2D Canvas
 
+
+check it in action:
 [![Netlify Status](https://api.netlify.com/api/v1/badges/6555a409-6bb0-4adb-9c9a-73ab11943ca7/deploy-status)](https://app.netlify.com/sites/elastic-collision-control/deploys)
 
 
