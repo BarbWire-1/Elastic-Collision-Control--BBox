@@ -15,7 +15,7 @@ class ShapeCollisionManager {
 		);
 	}
 	// made it a bit more verbose for readability
-	static resolveCollision(shape1, shape2, shape1Index, shape2Index) {
+	static resolveCollision(shape1, shape2) {
 		if (this.isColliding(shape1, shape2)) {
 			LOG && console.log("bbox collision detected");
 		} else {
@@ -66,20 +66,7 @@ class ShapeCollisionManager {
 			shape2.velocity[ axis ] -= impulse / shape2.mass;
 		});
 
-		if (LOG) {
-			const totalKEBefore =
-				shape1.getKineticEnergy() + shape2.getKineticEnergy();
-			const totalKEAfter =
-				shape1.getKineticEnergy() + shape2.getKineticEnergy();
-			console.log(
-				`Collision between shape ${shape1Index} and shape ${shape2Index}.`
-			);
-			console.log(
-				`Energy Before: ${totalKEBefore.toFixed(
-					2
-				)}, Energy After: ${totalKEAfter.toFixed(2)}`
-			);
-		}
+		return true;
 	}
 }
 

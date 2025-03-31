@@ -29,12 +29,10 @@ class CanvasManager {
 			const shapes = this.shapes;
 			shapes[ i ].update();
 			for (let j = i + 1; j < shapes.length; j++) {
-				ShapeCollisionManager.resolveCollision(
-					shapes[ i ],
-					shapes[ j ],
-					i,
-					j
-				);
+
+				if (ShapeCollisionManager.resolveCollision(shapes[ i ], shapes[ j ])) {
+					LOG && console.log(`Collision between shape ${i} and shape ${j} resolved.`);
+				}
 			}
 		}
 
