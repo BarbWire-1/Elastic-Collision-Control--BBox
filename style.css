@@ -14,7 +14,7 @@ body {
 }
 
 #canvas {
-
+display: block;
 	margin-left: 10vw;
 
 	width: 80vw;
