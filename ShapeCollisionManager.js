@@ -38,7 +38,8 @@ class ShapeCollisionManager {
 		[ "x", "y" ].forEach((axis) => {
 			direction[ axis ] = delta[ axis ] / distanceBetweenShapes;
 		});
-
+// TESTING CIRCLES ONLY
+		if (distanceBetweenShapes > shape1.radius + shape2.radius) return;
 		// vector of collision
 		const velocityAlongVector =
 			relativeVelocity.x * direction.x +
