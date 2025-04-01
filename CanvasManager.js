@@ -9,7 +9,8 @@ class CanvasManager {
 		this.isAnimating = false;
 		this.animationFrameId = null;
 		this.collisionHandler = new ShapeCollisionManager();
-		this.collisionPoints = []; // Store collision points with lifetimes and shapes
+		this.collisionPoints = new Map(); // Store collision points in a Map for uniqueness and lifetime
+		this.lifetime = 15
 	}
 
 	clear() {
@@ -20,7 +21,7 @@ class CanvasManager {
 		// Let each shape render itself
 		this.shapes.forEach((shape) => shape.draw(this.ctx));
 
-		// Draw precomputed stars
+		// Draw precomputed stars from the Map
 		this.collisionPoints.forEach(cp => {
 			this.ctx.beginPath();
 
@@ -60,26 +61,32 @@ class CanvasManager {
 					LOG && console.log(`Collision between shape ${i} and shape ${j} resolved.`);
 					[ shapes[ i ], shapes[ j ] ].map(s => s.handleBoundaryCollision());
 
+					// Create a unique key for the collision point (x,y)
+					const key = `${Math.round(collisionPoint.x * 1000)},${Math.round(collisionPoint.y * 1000)}`;
+
+
 					// Add new collision point with precomputed star and lifetime
-					this.collisionPoints.push({
-						point: collisionPoint,
-						shape: this.generateStar(collisionPoint, 6 + Math.floor(Math.random() * 4), 6, 15),
-						lifetime: 15
-					});
+					if (!this.collisionPoints.has(key)) {
+						this.collisionPoints.set(key, {
+							point: collisionPoint,
+							shape: this.generateStar(collisionPoint, 6 + Math.floor(Math.random() * 4), 6, 15),
+							lifetime: 15
+						});
+					}
 				}
 			}
 		}
 
-		// Reduce lifetime of existing collision points
-		this.collisionPoints.forEach(cp => cp.lifetime--);
-
-		// Remove expired collision points
-		this.collisionPoints = this.collisionPoints.filter(cp => cp.lifetime > 0);
+		// Reduce lifetime of existing collision points and remove expired ones
+		this.collisionPoints.forEach((cp, key) => {
+			cp.lifetime--;
+			if (cp.lifetime <= 0) this.collisionPoints.delete(key);
+		});
 
 		this.render();
 		this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
 	}
-// TODO make this a shapeClass
+
 	// Generate a proper star shape
 	generateStar(center, spikes, innerRadius, outerRadius) {
 		let points = [];

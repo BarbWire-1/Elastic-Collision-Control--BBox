@@ -34,7 +34,11 @@ const shapes = [
 
 	// Diagonal collision: one stationary, one moving diagonally
 	new Circle({ x: 400, y: 500 }, 30, 2, { x: 0, y: 0 }, "orange"), // stationary
-	new Circle({ x: 600, y: 300 }, 30, 2, { x: -2, y: 2 }, "yellow") // moving diagonally
+	new Circle({ x: 600, y: 300 }, 30, 2, { x: -2, y: 2 }, "yellow"), // moving diagonally
+
+
+	new Rectangle({ x: 400, y:300 }, 60, 40, 5, { x: 0, y: 1 }, "purple"),
+	new Rectangle({ x: 400, y: 400 }, 60, 40, 5, { x: 0, y: 0 }, "orange")
 ];
 const canvasManager = new CanvasManager(canvas, ctx, shapes);
 

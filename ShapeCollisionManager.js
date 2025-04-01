@@ -39,7 +39,22 @@ class ShapeCollisionManager {
 			direction[ axis ] = delta[ axis ] / distanceBetweenShapes;
 		});
 // TESTING CIRCLES ONLY
-		if (distanceBetweenShapes > shape1.radius + shape2.radius) return;
+		if (shape1.type === "circle" && shape2.type === "circle") {
+			if (distanceBetweenShapes > shape1.radius + shape2.radius) return;
+		}
+
+		// If one shape is a circle and the other is a rectangle
+		if ((shape1.type === "circle" && shape2.type === "rect") ||
+			(shape1.type === "rect" && shape2.type === "circle")) {
+
+			let circle = shape1.type === "circle" ? shape1 : shape2;
+			let rect = shape1.type === "rect" ? shape1 : shape2;
+
+			const bbox = rect.getBoundingBox(); // Use the rectangle's bounding box
+
+			if (distanceBetweenShapes > circle.radius + Math.max(bbox.width, bbox.height) / 2) return;
+		}
+
 		// vector of collision
 		const velocityAlongVector =
 			relativeVelocity.x * direction.x +
@@ -50,8 +65,8 @@ class ShapeCollisionManager {
 		if (velocityAlongVector > 0) return;
 		let collisionPoint = undefined;
 		collisionPoint = {
-			x: shape1.position.x + direction.x * shape1.radius,
-			y: shape1.position.y + direction.y * shape1.radius,
+			x: shape1.position.x + direction.x * (shape1.radius ?? shape1.width/2),
+			y: shape1.position.y + direction.y * (shape1.radius ?? shape1.height / 2),
 		};
 
 // TODO get relative to (mass-) center and direction to init spin
