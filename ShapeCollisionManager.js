@@ -48,24 +48,12 @@ class ShapeCollisionManager {
 		// not "resolve" again even if bboxes might still be overlapping
 		if (velocityAlongVector > 0) return;
 		let collisionPoint = undefined;
-
-		// point at shape1
-		const collisionPoint1 = {
+		collisionPoint = {
 			x: shape1.position.x + direction.x * shape1.radius,
 			y: shape1.position.y + direction.y * shape1.radius,
 		};
-		// point at shape2
-		const collisionPoint2 = {
-			x: shape2.position.x - direction.x * shape2.radius,
-			y: shape2.position.y - direction.y * shape2.radius,
-		};
 
-		// point of contact on canvas
-		collisionPoint = {
-			x: (collisionPoint1.x + collisionPoint2.x) / 2,
-			y: (collisionPoint1.y + collisionPoint2.y) / 2,
-		};
-
+// TODO get relative to (mass-) center and direction to init spin
 		LOG && console.log("Collision Point:", collisionPoint);
 
 
