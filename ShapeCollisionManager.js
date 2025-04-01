@@ -48,6 +48,8 @@ class ShapeCollisionManager {
 		// not "resolve" again even if bboxes might still be overlapping
 		if (velocityAlongVector > 0) return;
 
+
+		// TODO - elasticity not implemented yet. normalize for distribution accordingly to shape factor
 		// using default of 0.5 for each if not provided
 		// "perfect elastic collision"
 		const elasticity1 = shape1.elasticity ?? 0.5;
