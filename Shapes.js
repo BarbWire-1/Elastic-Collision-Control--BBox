@@ -33,10 +33,10 @@ class Shape {
 
 	handleBoundaryCollision() {
 		const bbox = this.getBoundingBox();
-		if (bbox.minX < 1 || bbox.maxX > canvas.width + 1) {
+		if (bbox.minX < 5 || bbox.maxX > canvas.width - 5) {
 			this.velocity.x *= -1;
 		}
-		if (bbox.minY < 1 || bbox.maxY > canvas.height + 1) {
+		if (bbox.minY < 5 || bbox.maxY > canvas.height - 5) {
 			this.velocity.y *= -1;
 		}
 	}
@@ -53,7 +53,7 @@ class Shape {
 	drawDebugInfo(ctx) {
 		if (!DRAW_INFO) return;
 		const bbox = this.getBoundingBox();
-		ctx.strokeStyle = "black";
+		ctx.strokeStyle = "rgba(144, 238, 144, 0.6)"; // Light green with 30% transparency
 		ctx.setLineDash([ 5, 5 ]);
 		ctx.strokeRect(
 			bbox.minX,

@@ -5,7 +5,7 @@ import CanvasManager from "./CanvasManager.js";
 import { Circle, Rectangle } from "./Shapes.js";
 
 // global var, like DRAW_INFO for debugging purposes only
-LOG = true;
+LOG = false
 
 // SET UP CANVAS
 const canvas = document.getElementById("canvas");
@@ -14,14 +14,28 @@ const ctx = canvas.getContext("2d");
 canvas.width = 800;
 canvas.height = 600;
 
-// INSTANTIATE
-const shapes = [
-	new Circle({ x: 200, y: 300 }, 30, 2, { x: 2, y: 2 }, "red"),
-	new Circle({ x: 500, y: 300 }, 40, 3, { x: 3, y: -2 }, "blue"),
-	new Rectangle({ x: 100, y: 100 }, 50, 30, 4, { x: 1, y: 1 }, "green"),
-	new Rectangle({ x: 400, y: 200 }, 60, 40, 5, { x: -1, y: -1 }, "purple")
-];
+// // INSTANTIATE
+// const shapes = [
+// 	new Circle({ x: 200, y: 300 }, 30, 2, { x: 2, y: 2 }, "red"),
+// 	new Circle({ x: 500, y: 300 }, 40, 3, { x: 3, y: -2 }, "blue"),
+// 	new Rectangle({ x: 100, y: 100 }, 50, 30, 4, { x: 1, y: 1 }, "green"),
+// 	new Rectangle({ x: 400, y: 200 }, 60, 40, 5, { x: -1, y: -1 }, "purple")
+// ];
 
+// INSTANTIATE TEST SHAPES
+const shapes = [
+	// Horizontal collision: one stationary, one moving horizontally
+	new Circle({ x: 200, y: 300 }, 30, 2, { x: 0, y: 0 }, "red"), // stationary
+	new Circle({ x: 400, y: 300 }, 30, 2, { x: -2, y: 0 }, "blue"), // moving horizontally
+
+	// Vertical collision: one stationary, one moving vertically
+	new Circle({ x: 600, y: 100 }, 30, 2, { x: 0, y: 0 }, "green"), // stationary
+	new Circle({ x: 600, y: 300 }, 30, 2, { x: 0, y: -2 }, "purple"), // moving vertically
+
+	// Diagonal collision: one stationary, one moving diagonally
+	new Circle({ x: 400, y: 500 }, 30, 2, { x: 0, y: 0 }, "orange"), // stationary
+	new Circle({ x: 600, y: 300 }, 30, 2, { x: -2, y: 2 }, "yellow") // moving diagonally
+];
 const canvasManager = new CanvasManager(canvas, ctx, shapes);
 
 const button = document.getElementById("toggleButton");
