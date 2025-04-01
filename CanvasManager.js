@@ -63,7 +63,7 @@ class CanvasManager {
 					// Add new collision point with precomputed star and lifetime
 					this.collisionPoints.push({
 						point: collisionPoint,
-						shape: this.generateStar(collisionPoint, 6 + Math.floor(Math.random() * 4), 10, 20),
+						shape: this.generateStar(collisionPoint, 6 + Math.floor(Math.random() * 4), 6, 15),
 						lifetime: 15
 					});
 				}
@@ -79,7 +79,7 @@ class CanvasManager {
 		this.render();
 		this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
 	}
-
+// TODO make this a shapeClass
 	// Generate a proper star shape
 	generateStar(center, spikes, innerRadius, outerRadius) {
 		let points = [];

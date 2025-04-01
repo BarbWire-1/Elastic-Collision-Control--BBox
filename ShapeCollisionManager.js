@@ -49,18 +49,18 @@ class ShapeCollisionManager {
 		if (velocityAlongVector > 0) return;
 		let collisionPoint = undefined;
 
-		// Berechne die Kollisionspunkte
+		// point at shape1
 		const collisionPoint1 = {
 			x: shape1.position.x + direction.x * shape1.radius,
 			y: shape1.position.y + direction.y * shape1.radius,
 		};
-
+		// point at shape2
 		const collisionPoint2 = {
 			x: shape2.position.x - direction.x * shape2.radius,
 			y: shape2.position.y - direction.y * shape2.radius,
 		};
 
-		// Optional: Berechne den tatsächlichen Kontaktpunkt
+		// point of contact on canvas
 		collisionPoint = {
 			x: (collisionPoint1.x + collisionPoint2.x) / 2,
 			y: (collisionPoint1.y + collisionPoint2.y) / 2,
