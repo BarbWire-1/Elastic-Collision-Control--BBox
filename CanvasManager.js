@@ -56,19 +56,19 @@ class CanvasManager {
 			const shapes = this.shapes;
 			shapes[ i ].update();
 			for (let j = i + 1; j < shapes.length; j++) {
-				const collisionPoint = ShapeCollisionManager.resolveCollision(shapes[ i ], shapes[ j ]);
+				const collisionPoint = ShapeCollisionManager.resolveCollision(shapes[ i ], shapes[ j ]);;
+				const key = collisionPoint
 				if (collisionPoint) {
 					LOG && console.log(`Collision between shape ${i} and shape ${j} resolved.`);
 					[ shapes[ i ], shapes[ j ] ].map(s => s.handleBoundaryCollision());
 
-					// Create a unique key for the collision point (x,y)
-					const key = `${Math.round(collisionPoint.x * 1000)},${Math.round(collisionPoint.y * 1000)}`;
+
 
 
 					// Add new collision point with precomputed star and lifetime
 					if (!this.collisionPoints.has(key)) {
 						this.collisionPoints.set(key, {
-							point: collisionPoint,
+							key: collisionPoint,
 							shape: this.generateStar(collisionPoint, 6 + Math.floor(Math.random() * 4), 6, 15),
 							lifetime: 15
 						});
