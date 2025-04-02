@@ -13,6 +13,7 @@ class Shape {
 		this.velocity = velocity;
 		this.mass = mass;
 		this.color = color;
+	
 	}
 
 	getKineticEnergy() {

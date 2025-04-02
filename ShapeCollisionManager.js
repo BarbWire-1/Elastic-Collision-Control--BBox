@@ -38,22 +38,7 @@ class ShapeCollisionManager {
 		[ "x", "y" ].forEach((axis) => {
 			direction[ axis ] = delta[ axis ] / distanceBetweenShapes;
 		});
-// TESTING CIRCLES ONLY
-		if (shape1.type === "circle" && shape2.type === "circle") {
-			if (distanceBetweenShapes > shape1.radius + shape2.radius) return;
-		}
 
-		// If one shape is a circle and the other is a rectangle
-		if ((shape1.type === "circle" && shape2.type === "rect") ||
-			(shape1.type === "rect" && shape2.type === "circle")) {
-
-			let circle = shape1.type === "circle" ? shape1 : shape2;
-			let rect = shape1.type === "rect" ? shape1 : shape2;
-
-			const bbox = rect.getBoundingBox(); // Use the rectangle's bounding box
-
-			if (distanceBetweenShapes > circle.radius + Math.max(bbox.width, bbox.height) / 2) return;
-		}
 
 		// vector of collision
 		const velocityAlongVector =
@@ -63,10 +48,13 @@ class ShapeCollisionManager {
 		// moving away from each other - prevent jittering,
 		// not "resolve" again even if bboxes might still be overlapping
 		if (velocityAlongVector > 0) return;
+
+		// currently only calculating and visulaising point for circles
+		if (distanceBetweenShapes > shape1.radius + shape2.radius) return;
 		let collisionPoint = undefined;
 		collisionPoint = {
-			x: shape1.position.x + direction.x * (shape1.radius ?? shape1.width/2),
-			y: shape1.position.y + direction.y * (shape1.radius ?? shape1.height / 2),
+			x: shape1.position.x + direction.x * shape1.radius,
+			y: shape1.position.y + direction.y * shape1.radius ,
 		};
 
 // TODO get relative to (mass-) center and direction to init spin
@@ -92,7 +80,7 @@ class ShapeCollisionManager {
 			shape2.velocity[ axis ] -= impulse / shape2.mass;
 		});
 
-		return collisionPoint;
+		return collisionPoint ? collisionPoint : true;
 	}
 }
 

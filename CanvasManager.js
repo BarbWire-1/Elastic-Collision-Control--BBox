@@ -70,7 +70,7 @@ class CanvasManager {
 						this.collisionPoints.set(key, {
 							key: collisionPoint,
 							shape: this.generateStar(collisionPoint, 6 + Math.floor(Math.random() * 4), 6, 15),
-							lifetime: 15
+							lifetime: 5
 						});
 					}
 				}
