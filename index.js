@@ -5,42 +5,107 @@ import CanvasManager from "./CanvasManager.js";
 import { Circle, Rectangle } from "./Shapes.js";
 
 // global var, like DRAW_INFO for debugging purposes only
-LOG = false
+globalThis.LOG = false;
+globalThis.DRAW_INFO = false
 
 // SET UP CANVAS
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = 800;
-canvas.height = 600;
+canvas.height = 500;
 
-// // INSTANTIATE
-// const shapes = [
-// 	new Circle({ x: 200, y: 300 }, 30, 2, { x: 2, y: 2 }, "red"),
-// 	new Circle({ x: 500, y: 300 }, 40, 3, { x: 3, y: -2 }, "blue"),
-// 	new Rectangle({ x: 100, y: 100 }, 50, 30, 4, { x: 1, y: 1 }, "green"),
-// 	new Rectangle({ x: 400, y: 200 }, 60, 40, 5, { x: -1, y: -1 }, "purple")
-// ];
+const ballRadius = 25;
+const mass = 2;
+const spacing = ballRadius * 2 + 1;
 
-// INSTANTIATE TEST SHAPES
-const shapes = [
-	// Horizontal collision: one stationary, one moving horizontally
-	new Circle({ x: 200, y: 300 }, 30, 2, { x: 0, y: 0 }, "red"), // stationary
-	new Circle({ x: 400, y: 300 }, 30, 2, { x: -2, y: 0 }, "blue"), // moving horizontally
+// Cue ball (massive velocity)
+const cueBall = new Circle(
+	{ x: 100, y: canvas.height / 2 },
+	ballRadius,
+	mass,
+	{ x: 5, y: 0 }, // Massive horizontal velocity
+	"white"
+);
 
-	// Vertical collision: one stationary, one moving vertically
-	new Circle({ x: 600, y: 100 }, 30, 2, { x: 0, y: 0 }, "green"), // stationary
-	new Circle({ x: 600, y: 300 }, 30, 2, { x: 0, y: -2 }, "purple"), // moving vertically
+// Arrange balls in a rhombus shape
+const rhombusBalls = [];
+const startX = 450;
+const startY = canvas.height / 2;
+let rows = 5;
 
-	// Diagonal collision: one stationary, one moving diagonally
-	new Circle({ x: 400, y: 500 }, 30, 2, { x: 0, y: 0 }, "orange"), // stationary
-	new Circle({ x: 600, y: 300 }, 30, 2, { x: -2, y: 2 }, "yellow"), // moving diagonally
+for (let row = 0; row < rows; row++) {
+	const numBalls = row < Math.ceil(rows / 2) ? row + 1 : rows - row;
+	const offsetX = spacing * row;
+	const offsetY = -spacing * (numBalls - 1) / 2;
+
+	for (let col = 0; col < numBalls; col++) {
+		rhombusBalls.push(
+			new Circle(
+				{
+					x: startX + offsetX,
+					y: startY + offsetY + col * spacing,
+				},
+				ballRadius,
+				mass,
+				{ x: 0, y: 0 },
+				`hsl(${(row * 60 + col * 20) % 360}, 100%, 50%)` // colorful
+			)
+		);
+	}
+}
+let pocketPositions = undefined
+function drawPockets(ctx) {
+	const pocketRadius = 40;
+	const w = canvas.width;
+	const h = canvas.height;
+
+	pocketPositions = [
+		{ x: 10, y: 10 },               // top-left
+		{ x: w / 2, y: 0 },           // top-middle
+		{ x: w-10, y: 10 },               // top-right
+		{ x: 10, y: h -10},               // bottom-left
+		{ x: w / 2, y: h },           // bottom-middle
+		{ x: w-10, y: h-10 },               // bottom-right
+	];
+
+	ctx.fillStyle = "black";
+	for (const pos of pocketPositions) {
+		ctx.beginPath();
+		ctx.arc(pos.x, pos.y, pocketRadius, 0, Math.PI * 2);
+		ctx.fill();
+	}
+}
 
 
-	 //new Rectangle({ x: 400, y:300 }, 60, 40, 5, { x: 0, y: 1 }, "purple"),
-	 //new Rectangle({ x: 400, y: 400 }, 260, 40, 5, { x: 0, y: 0 }, "orange")
-];
+const shapes = [ cueBall, ...rhombusBalls ];
 const canvasManager = new CanvasManager(canvas, ctx, shapes);
+
+
+
+function checkPocketCollision(shapes, pocketPositions, pocketRadius) {
+	for (let i = shapes.length - 1; i >= 0; i--) {
+		const shape = shapes[ i ];
+
+		for (const pocket of pocketPositions) {
+			const dx = shape.position.x - pocket.x;
+			const dy = shape.position.y - pocket.y;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+
+			if (distance < pocketRadius +5) {
+				shapes.splice(i, 1); // Remove shape from array
+				break;
+			}
+		}
+	}
+}
+
+canvasManager.animationCallbacks = [
+	() => drawPockets(canvasManager.ctx),
+	() => checkPocketCollision(canvasManager.shapes, pocketPositions, 30)
+];
+
+
 
 const button = document.getElementById("toggleButton");
 

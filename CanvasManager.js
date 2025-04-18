@@ -2,7 +2,7 @@ import ShapeCollisionManager from "./ShapeCollisionManager.js";
 
 // CanvasManager class for managing canvas operations
 class CanvasManager {
-	constructor (canvas, ctx, shapes) {
+	constructor (canvas, ctx, shapes, animationCallbacks = []) {
 		this.canvas = canvas;
 		this.ctx = ctx;
 		this.shapes = shapes;
@@ -10,7 +10,8 @@ class CanvasManager {
 		this.animationFrameId = null;
 		this.collisionHandler = new ShapeCollisionManager();
 		this.collisionPoints = new Map(); // Store collision points in a Map for uniqueness and lifetime
-		this.lifetime = 15
+		this.lifetime = 15;
+		this.animationCallbacks = animationCallbacks
 	}
 
 	clear() {
@@ -50,34 +51,66 @@ class CanvasManager {
 	animate() {
 		if (!this.isAnimating) return;
 		this.clear();
+		this.animationCallbacks.forEach(fn => fn())
+		const shapes = this.shapes;
 
-		// Update and check for collisions
-		for (let i = 0; i < this.shapes.length; i++) {
-			const shapes = this.shapes;
-			shapes[ i ].update();
+		// Update and draw debug lines
+		for (let i = 0; i < shapes.length; i++) {
+
+
+			// 💥 Draw velocity line from center to edge
+			//const line = ShapeCollisionManager.getCenterToEdgeLine(shape);
+// 			if (line) {
+// 				this.ctx.beginPath();
+// 				this.ctx.moveTo(line.start.x, line.start.y);
+// 				this.ctx.lineTo(line.end.x, line.end.y);
+// 				this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+// 				this.ctx.lineWidth = 1;
+// 				this.ctx.stroke();
+//
+// 				// Optional: mark edge point
+// 				this.ctx.beginPath();
+// 				this.ctx.arc(line.end.x, line.end.y, 2, 0, Math.PI * 2);
+// 				this.ctx.fillStyle = 'blue';
+// 				this.ctx.fill();
+// 			}
+		}
+
+		// Collision detection between all shape pairs
+		for (let i = 0; i < shapes.length; i++) {
+
+			const shape = shapes[ i ];
+			shape.update();
 			for (let j = i + 1; j < shapes.length; j++) {
-				const collisionPoint = ShapeCollisionManager.resolveCollision(shapes[ i ], shapes[ j ]);;
-				const key = collisionPoint
+				const shapeA = shapes[ i ];
+				const shapeB = shapes[ j ];
+
+				const collisionPoint = ShapeCollisionManager.resolveCollision(shapeA, shapeB);
+
 				if (collisionPoint) {
 					LOG && console.log(`Collision between shape ${i} and shape ${j} resolved.`);
-					[ shapes[ i ], shapes[ j ] ].map(s => s.handleBoundaryCollision());
 
-
-
-
-					// Add new collision point with precomputed star and lifetime
+					// Add visual marker if new collision point
+					const key = collisionPoint;
 					if (!this.collisionPoints.has(key)) {
 						this.collisionPoints.set(key, {
 							key: collisionPoint,
-							shape: this.generateStar(collisionPoint, 6 + Math.floor(Math.random() * 4), 6, 15),
+							shape: this.generateStar(
+								collisionPoint,
+								6 + Math.floor(Math.random() * 4),
+								6,
+								15
+							),
 							lifetime: 5
 						});
 					}
 				}
 			}
+
+
 		}
 
-		// Reduce lifetime of existing collision points and remove expired ones
+		// Fade out collision stars over time
 		this.collisionPoints.forEach((cp, key) => {
 			cp.lifetime--;
 			if (cp.lifetime <= 0) this.collisionPoints.delete(key);
@@ -86,6 +119,7 @@ class CanvasManager {
 		this.render();
 		this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
 	}
+
 
 	// Generate a proper star shape
 	generateStar(center, spikes, innerRadius, outerRadius) {

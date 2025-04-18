@@ -1,4 +1,3 @@
-globalThis.DRAW_INFO = true; // draws bbox, KE and vector-magnitude
 
 // ABSTRACT SHAPECLASS
 class Shape {
@@ -13,7 +12,9 @@ class Shape {
 		this.velocity = velocity;
 		this.mass = mass;
 		this.color = color;
-	
+
+		this.bbox = undefined;
+
 	}
 
 	getKineticEnergy() {
@@ -34,11 +35,13 @@ class Shape {
 
 	handleBoundaryCollision() {
 		const bbox = this.getBoundingBox();
-		if (bbox.minX < 5 || bbox.maxX > canvas.width - 5) {
+		if (bbox.minX < 0 || bbox.maxX > canvas.width ) {
 			this.velocity.x *= -1;
+			this.position.x += Math.sign(this.velocity.x) * 3
 		}
-		if (bbox.minY < 5 || bbox.maxY > canvas.height - 5) {
+		if (bbox.minY < 0 || bbox.maxY > canvas.height ) {
 			this.velocity.y *= -1;
+			this.position.y += Math.sign(this.velocity.y) * 3
 		}
 	}
 
@@ -94,12 +97,14 @@ class Circle extends Shape {
 	}
 
 	getBoundingBox() {
-		return {
+
+		this.bbox = {
 			minX: this.position.x - this.radius,
 			maxX: this.position.x + this.radius,
 			minY: this.position.y - this.radius,
 			maxY: this.position.y + this.radius
 		};
+		return this.bbox;
 	}
 
 	// Implement the draw method for Circle
@@ -126,12 +131,14 @@ class Rectangle extends Shape {
 	}
 
 	getBoundingBox() {
-		return {
+
+		this.bbox = {
 			minX: this.position.x - this.width / 2,
 			maxX: this.position.x + this.width / 2,
 			minY: this.position.y - this.height / 2,
 			maxY: this.position.y + this.height / 2
 		};
+		return this.bbox;
 	}
 
 	// Implement the draw method for Rectangle

@@ -7,20 +7,28 @@ body {
 
 	height: 100vh;
 	background-color: #f0f0f0;
+	align-items: center;
 }
 
-* {
+button {
 	margin: 20px;
 }
-
+p {
+	margin: 0;
+}
 #canvas {
-display: block;
-	margin-left: 10vw;
+	background-color: rgb(10, 57, 34);
+	display: block;
+	margin-left: 5vw;
 
 	width: 80vw;
-	height: 60vw;
-	border: 1px solid black;
+	height: 50vw;
+	border: 40px solid rgb(58, 40, 5);
+	border-radius: 20px;
+
+
 }
+
 
 #btnContainer {
 	display: flex;
