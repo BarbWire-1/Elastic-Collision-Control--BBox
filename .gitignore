@@ -1,3 +1,6 @@
 .qodo
+.vscode
 *.txt
 Examples/
+compare.js
+compare2.js
