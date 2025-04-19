@@ -1,5 +1,5 @@
-.qodo
-.vscode
+.qodo/
+.vscode/
 *.txt
 Examples/
 compare.js

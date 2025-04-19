@@ -54,27 +54,7 @@ class CanvasManager {
 		this.animationCallbacks.forEach(fn => fn())
 		const shapes = this.shapes;
 
-		// Update and draw debug lines
-		for (let i = 0; i < shapes.length; i++) {
 
-
-			// 💥 Draw velocity line from center to edge
-			//const line = ShapeCollisionManager.getCenterToEdgeLine(shape);
-// 			if (line) {
-// 				this.ctx.beginPath();
-// 				this.ctx.moveTo(line.start.x, line.start.y);
-// 				this.ctx.lineTo(line.end.x, line.end.y);
-// 				this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-// 				this.ctx.lineWidth = 1;
-// 				this.ctx.stroke();
-//
-// 				// Optional: mark edge point
-// 				this.ctx.beginPath();
-// 				this.ctx.arc(line.end.x, line.end.y, 2, 0, Math.PI * 2);
-// 				this.ctx.fillStyle = 'blue';
-// 				this.ctx.fill();
-// 			}
-		}
 
 		// Collision detection between all shape pairs
 		for (let i = 0; i < shapes.length; i++) {

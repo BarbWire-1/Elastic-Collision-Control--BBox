@@ -1,6 +1,10 @@
 // TODO implement drawing as polygons to handle collision on contourPoints instead of bbox (now simplified for testing energy-transfer only - no other physical forces applied here)
 // TODO keep shape-subclasses or add an object of drawRules by type???
 // TODO - make mixins , add physics props (worlds, materials)
+
+
+//TODO - change animationCallbacks to handle global/shape/ shape-otherShape and call in animate where structure fits!
+// TODO refactor and separate this "billard" playstuff to splice into canvasManager
 import CanvasManager from "./CanvasManager.js";
 import { Circle, Rectangle } from "./Shapes.js";
 
@@ -17,14 +21,14 @@ canvas.height = 500;
 
 const ballRadius = 25;
 const mass = 2;
-const spacing = ballRadius * 2 + 1;
+const spacing = ballRadius * 2 ;
 
 // Cue ball (massive velocity)
 const cueBall = new Circle(
 	{ x: 100, y: canvas.height / 2 },
 	ballRadius,
 	mass,
-	{ x: 5, y: 0 }, // Massive horizontal velocity
+	{ x: 10, y: 0 }, // Massive horizontal velocity
 	"white"
 );
 
@@ -49,7 +53,7 @@ for (let row = 0; row < rows; row++) {
 				ballRadius,
 				mass,
 				{ x: 0, y: 0 },
-				`hsl(${(row * 60 + col * 20) % 360}, 100%, 50%)` // colorful
+				`hsl(${(row * 60 + col * 20) % 360}, 100%, 50%)`
 			)
 		);
 	}
@@ -125,3 +129,31 @@ const toggleDebugInfo = () => (DRAW_INFO = !DRAW_INFO);
 document
 	.getElementById("toggleDebugButton")
 	.addEventListener("click", toggleDebugInfo);
+
+
+	/*
+	document.addEventListener('keydown', (e) => {
+  if (e.key === 'd') DEBUG_INFO = !DEBUG_INFO;
+
+  class Debuggable {
+  constructor() {
+    this.DEBUG_INFO = false;
+    this._setupDebugToggle();
+  }
+
+  _setupDebugToggle() {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'd') this.DEBUG_INFO = !this.DEBUG_INFO;
+    });
+  }
+
+  drawDebugInfo() {
+    if (this.DEBUG_INFO) {
+      // Custom debug info logic here
+      console.log("Debug info on!");
+    }
+  }
+}
+
+});
+*/
