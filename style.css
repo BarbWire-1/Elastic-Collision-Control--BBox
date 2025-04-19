@@ -36,9 +36,9 @@ p {
 	display: block;
 
 
-	width: 80vw;
-	height: 50vw;
-	border: 3vw solid rgb(116, 85, 35);
+	width: min(80vw , 80vh);
+	height: min(50vw, 50vh);
+	border: min(3vw, 3vh) solid rgb(116, 85, 35);
 	border-radius: 20px;
 	outline: 5px solid rgb(187, 167, 35);
 	outline-offset: 1vw;
