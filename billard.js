@@ -1,13 +1,15 @@
 import { Circle } from "./Shapes.js";
 // TODO add real queue with drag control for angle and power
 
+// TODO only pass ctx as arg and return all necessary for usage with handler!!!!
+
 // hide cueball inputs if hasCueball, add popup : want to create a new cueBall?.... when dropped
 export function createBillardSimulation(canvasHandler) {
 	const ctx = canvasHandler.ctx
 	const ballRadius = 20;
 	const mass = 1;
-	const spacing = ballRadius * 2;
-let hasCueBall = false;
+
+	let hasCueBall = false;
 
 	const getCueBallVelocity = () => {
 		const vx = parseFloat(document.getElementById('vx').value);
@@ -28,34 +30,37 @@ let hasCueBall = false;
 		const cueBall = createCueBall();
 		cueBall.id = "cueBall";
 		canvasHandler.addShape(cueBall);
-		canvasHandler.drawOnce(); // so it appears without animating
+		canvasHandler.drawOnce(); // pre-draws without animating
 		hasCueBall = true;
 	});
 
 
-	// Create balls arranged in a rhombus pattern
+	// create balls arranged in a rhombus pattern
 	const createRhombusBalls = () => {
+		const spacing = ballRadius * 2;
 		const rhombusBalls = [];
 		const startX = 450;
 		const startY = canvas.height / 2;
 		let rows = 5;
 
-		for (let row = 0; row < rows; row++) {
-			const numBalls = row < Math.ceil(rows / 2) ? row + 1 : rows - row;
-			const offsetX = spacing * row;
+		for (let i = 0; i < rows; i++) {
+			// get position per row (5 rows => 1-3-5-3-1)
+			const numBalls = i < Math.ceil(rows / 2) ? i + 1 : rows - i;
+			const offsetX = spacing * i;
 			const offsetY = -spacing * (numBalls - 1) / 2;
 
-			for (let col = 0; col < numBalls; col++) {
+			// create shapes per row
+			for (let j = 0; j < numBalls; j++) {
 				rhombusBalls.push(
 					new Circle(
 						{
 							x: startX + offsetX,
-							y: startY + offsetY + col * spacing,
+							y: startY + offsetY + j * spacing,
 						},
 						ballRadius,
 						mass,
 						{ x: 0, y: 0 },
-						`hsl(${(row * 60 + col * 20) % 360}, 100%, 50%)`
+						`hsl(${(i * 60 + j * 20) % 360}, 100%, 50%)`
 					)
 				);
 			}
@@ -63,7 +68,7 @@ let hasCueBall = false;
 		return rhombusBalls;
 	};
 	const pocketRadius = 30;
-	// Define pocket positions
+
 	const createPockets = (ctx) => {
 
 		const w = canvas.width;
@@ -102,10 +107,10 @@ let hasCueBall = false;
 					if (shape.id === "cueBall") {
 						hasCueBall = false;
 
-						// Add a delay before stopping the animation
+						// If cueball falls, pause and sets flag to allow adding new one
 						setTimeout(() => {
 							canvasHandler.stopAnimation();
-						}, 50); // Adjust time based on how long the animation takes to render one frame
+						}, 50); // necessary to not stop before next frame
 					}
 					break;
 				}
@@ -115,28 +120,28 @@ let hasCueBall = false;
 	};
 
 	// Setup the simulation components
-	//const cueBall = createCueBall();
-	const rhombusBalls = createRhombusBalls();
+	const balls = createRhombusBalls();
 	const pocketPositions = createPockets(ctx);
 
-	// Combine all shapes for the simulation
-	const shapes = [ ...rhombusBalls ];
 
 	// Add the shapes to CanvasHandler
-	shapes.forEach(shape => canvasHandler.addShape(shape));
+	balls.forEach(shape => canvasHandler.addShape(shape));
 
-	// Set up collision callbacks for the balls
+	// Set up collision callbacks for the balls - hmmm.... better return methods and do that in main?
 	const callbacks = canvasHandler.animationCallbacks;
-callbacks.global.push(() =>createPockets(canvasHandler.ctx))
+	callbacks.global.push(() => createPockets(canvasHandler.ctx))
 	callbacks.shape.push(checkPocketCollision(pocketPositions, pocketRadius))
 
 
 
 
-// 	// Return the simulation components if needed
-// 	return {
-// 		cueBall,
-// 		rhombusBalls,
-// 		pocketPositions
-// 	};
- }
+		// Return the simulation components if needed
+// 		return {
+//
+// 			createPockets,
+// 			checkPocketCollision,
+// 			balls,
+// 			pocketPositions,
+// 	     pocketRadius
+// 		};
+}
