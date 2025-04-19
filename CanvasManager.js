@@ -21,42 +21,32 @@ class CanvasManager {
 	// dependency injection for loosly coupling and as a bonus allow multiple factories to be handled here
 	// TODO - check this later with existing mixin-system. That could be fun!!!
 	init() {
+		const dependencyMap = {
+			ctx: this.ctx,
+			addShape: this.addShape.bind(this),
+			drawOnce: this.drawOnce.bind(this),
+			shapes: this.shapes,
+			stopAnimation: this.stopAnimation.bind(this),
+			animationCallbacks: this.animationCallbacks,
+			canvas: this.canvas,
+		};
+
 		this.factories.forEach(factory => {
 			const dependencies = factory.dependencies || {};
 			const injected = {};
 
-			// Inject the requested dependencies
 			for (const key in dependencies) {
-				switch (dependencies[ key ]) {
-					case 'ctx':
-						injected[ key ] = this.ctx;
-						break;
-					case 'addShape':
-						injected[ key ] = this.addShape.bind(this);
-						break;
-					case 'drawOnce':
-						injected[ key ] = this.drawOnce.bind(this);
-						break;
-					case 'shapes':
-						injected[ key ] = this.shapes;
-						break;
-					case 'stopAnimation':
-						injected[ key ] = this.stopAnimation.bind(this);
-						break;
-					case 'animationCallbacks':
-						injected[ key ] = this.animationCallbacks;
-						break;
-					case 'canvas':
-						injected[ key ] = this.canvas;
-						break;
-					default:
-						console.warn(`Unknown dependency: ${dependencies[ key ]}`);
-				}
+				const depName = dependencies[ key ];
+				depName in dependencyMap ?
+					injected[ key ] = dependencyMap[ depName ]
+					: console.warn(`Unknown dependency: ${depName} requested from ${factory.name ?? factory}`);
+
 			}
 
-			factory(injected); // call the factory with injected dependencies
+			factory(injected);
 		});
 	}
+
 	drawOnce() {
 		this.clear();
 		this.runGlobalCallbacks();

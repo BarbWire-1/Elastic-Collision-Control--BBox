@@ -15,6 +15,8 @@ export function createBillardSimulation(dependencies) {
 		canvas
 	} = dependencies;
 
+
+
 	const ballRadius = 20;
 	const mass = 1;
 	let hasCueBall = false;
