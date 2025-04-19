@@ -1,19 +1,35 @@
 import { Circle } from "./Shapes.js";
-
+// TODO add real queue with drag control for angle and power
 export function createBillardSimulation(canvasHandler) {
 	const ctx = canvasHandler.ctx
 	const ballRadius = 20;
 	const mass = 1;
 	const spacing = ballRadius * 2;
+let hasCueBall = false;
 
-	// Create the cue ball with an initial velocity
+	const getCueBallVelocity = () => {
+		const vx = parseFloat(document.getElementById('vx').value);
+		const vy = parseFloat(document.getElementById('vy').value);
+		return { x: vx * SPEED_MULTIPLIER, y: vy * SPEED_MULTIPLIER };
+	};
+
 	const createCueBall = () => new Circle(
 		{ x: 100, y: canvas.height / 2 },
 		ballRadius,
 		mass,
-		{ x: 10 * SPEED_MULTIPLIER, y: 0 },
+		getCueBallVelocity(),
 		"white"
 	);
+
+	document.getElementById('createCueBall').addEventListener('click', () => {
+		if (hasCueBall) return;
+		const cueBall = createCueBall();
+		cueBall.id = "cueBall";
+		canvasHandler.addShape(cueBall);
+		canvasHandler.drawOnce(); // so it appears without animating
+		hasCueBall = true;
+	});
+
 
 	// Create balls arranged in a rhombus pattern
 	const createRhombusBalls = () => {
@@ -78,22 +94,31 @@ export function createBillardSimulation(canvasHandler) {
 				const dy = shape.position.y - pocket.y;
 				const distance = Math.sqrt(dx * dx + dy * dy);
 
-				if (distance -4 < pocketRadius) {
+				if (distance - 4 < pocketRadius) {
 					// Remove the ball that falls into the pocket
 					canvasHandler.shapes.splice(i, 1);
+					if (shape.id === "cueBall") {
+						hasCueBall = false;
+
+						// Add a delay before stopping the animation
+						setTimeout(() => {
+							canvasHandler.stopAnimation();
+						}, 50); // Adjust time based on how long the animation takes to render one frame
+					}
 					break;
 				}
+
 			}
 		};
 	};
 
 	// Setup the simulation components
-	const cueBall = createCueBall();
+	//const cueBall = createCueBall();
 	const rhombusBalls = createRhombusBalls();
 	const pocketPositions = createPockets(ctx);
 
 	// Combine all shapes for the simulation
-	const shapes = [ cueBall, ...rhombusBalls ];
+	const shapes = [ ...rhombusBalls ];
 
 	// Add the shapes to CanvasHandler
 	shapes.forEach(shape => canvasHandler.addShape(shape));

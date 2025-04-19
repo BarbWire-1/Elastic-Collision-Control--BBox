@@ -27,7 +27,7 @@ const canvasManager = new CanvasManager(canvas);
 // BILLARD
 createBillardSimulation(canvasManager)
 
-
+canvasManager.drawOnce()
 
 // BUTTON STUFF
 const button = document.getElementById("toggleButton");
@@ -41,7 +41,8 @@ function toggleAnimation() {
 		button.textContent = "Stop Animation";
 	}
 }
-toggleAnimation()
+
+
 button.addEventListener("click", toggleAnimation);
 
 const toggleDebugInfo = () => (DRAW_INFO = !DRAW_INFO);

@@ -13,7 +13,21 @@ class CanvasManager {
 		this.collisionHandler = new ShapeCollisionManager();
 		this.collisionPoints = new Map(); // store collision points in a Map for uniqueness and lifetime
 		this.animationCallbacks = animationCallbacks;
+
+	
 	}
+
+	drawOnce() {
+		this.clear();
+		this.runGlobalCallbacks();
+
+		for (let i = 0; i < this.shapes.length; i++) {
+			const shape = this.shapes[ i ];
+			shape.draw(this.ctx); // ❌ No update!
+			this.runShapeCallbacks(shape, i);
+		}
+	}
+
 
 	clear() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
