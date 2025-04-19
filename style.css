@@ -21,6 +21,11 @@ button {
 	background-color: rgb(125, 4, 246) !important;
 }
 
+button:hover {
+	transform: scale(1.1);
+	box-shadow: 4px 8px 8px 0 rgba(250, 0, 179, 0.2), 2px 6px 16px 0 rgba(255,255,255, 0.05);
+}
+
 p {
 	margin: 0;
 }
