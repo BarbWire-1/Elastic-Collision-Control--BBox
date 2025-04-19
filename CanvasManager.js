@@ -21,10 +21,12 @@ class CanvasManager {
 	// dependency injection for loosly coupling and as a bonus allow multiple factories to be handled here
 	// TODO - check this later with existing mixin-system. That could be fun!!!
 	init() {
+
 		const dependencyMap = {
+
 			ctx: this.ctx,
 			addShape: this.addShape.bind(this),
-			drawOnce: this.drawOnce.bind(this),
+			initialDraw: this.initialDraw.bind(this),
 			shapes: this.shapes,
 			stopAnimation: this.stopAnimation.bind(this),
 			animationCallbacks: this.animationCallbacks,
@@ -43,11 +45,11 @@ class CanvasManager {
 
 			}
 
-			factory(injected);
+			factory(injected);// call the factory with passed requested dependencies
 		});
 	}
-
-	drawOnce() {
+	// only added for now (?) to once draw before triggering the animation
+	initialDraw() {
 		this.clear();
 		this.runGlobalCallbacks();
 

@@ -8,7 +8,7 @@ export function createBillardSimulation(dependencies) {
 	const {
 		ctx,
 		addShape,
-		drawOnce,
+		initialDraw,
 		shapes,
 		stopAnimation,
 		animationCallbacks,
@@ -40,7 +40,7 @@ export function createBillardSimulation(dependencies) {
 		const cueBall = createCueBall();
 		cueBall.id = "cueBall";
 		addShape(cueBall);
-		drawOnce();
+		initialDraw();
 		hasCueBall = true;
 	});
 
@@ -145,7 +145,7 @@ export function createBillardSimulation(dependencies) {
 createBillardSimulation.dependencies = {
 	ctx: 'ctx',
 	addShape: 'addShape',
-	drawOnce: 'drawOnce',
+	initialDraw: 'initialDraw',
 	shapes: 'shapes',
 	stopAnimation: 'stopAnimation',
 	animationCallbacks: 'animationCallbacks',

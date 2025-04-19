@@ -29,7 +29,7 @@ canvasManager.factories.push(createBillardSimulation)
 
 
 canvasManager.init()
-canvasManager.drawOnce()
+canvasManager.initialDraw()
 
 // BUTTON STUFF
 const button = document.getElementById("toggleButton");
