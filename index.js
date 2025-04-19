@@ -39,7 +39,7 @@ function toggleAnimation() {
 		button.textContent = "Stop Animation";
 	}
 }
-
+toggleAnimation()
 button.addEventListener("click", toggleAnimation);
 
 const toggleDebugInfo = () => (DRAW_INFO = !DRAW_INFO);
