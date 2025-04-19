@@ -107,30 +107,38 @@ class CanvasManager {
 			shape.draw(this.ctx);         		// Draw to canvas
 			this.runShapeCallbacks(shape, i); 	// Callbacks like pocket check here
 
-
 			// Collision check (only with other shapes after this one)
 			for (let j = i + 1; j < shapes.length; j++) {
 				const shapeB = shapes[ j ];
 				const collisionPoint = ShapeCollisionManager.resolveCollision(shape, shapeB);
 
-				if (collisionPoint) {
-					const key = collisionPoint;
-					if (!this.collisionPoints.has(key)) {
-						this.collisionPoints.set(key, {
-							key: collisionPoint,
-							shape: this.generateStar(
-								collisionPoint,
-								6 + Math.floor(Math.random() * 4),
-								6,
-								15
-							),
-							lifetime: 5
-						});
-					}
-				}
+				collisionPoint && this.handleCollisionPoint(collisionPoint);
+
 			}
 		}
+		// => draw collisionMarks for lifetime, then delete point
+		this.handleCollisionPointsLifeCycle()
 
+		this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
+	}
+
+	// create a star at point as long as stored
+	handleCollisionPoint(collisionPoint) {
+		const key = collisionPoint;
+		if (!this.collisionPoints.has(key)) {
+			this.collisionPoints.set(key, {
+				key: collisionPoint,
+				shape: this.generateStar(collisionPoint,
+					6 + Math.floor(Math.random() * 4),
+					6,
+					15
+				),
+				lifetime: 5
+			});
+		}
+	}
+
+	handleCollisionPointsLifeCycle() {
 		// Clean up collision points and draw effects
 		this.collisionPoints.forEach((cp, key) => {
 			cp.lifetime--;
@@ -153,8 +161,6 @@ class CanvasManager {
 				this.ctx.fill();
 			}
 		});
-
-		this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
 	}
 
 	// generate star shape

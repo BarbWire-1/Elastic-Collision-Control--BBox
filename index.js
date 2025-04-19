@@ -39,11 +39,11 @@ canvasHandler.init();
 const button = document.getElementById("toggleButton");
 
 function toggleAnimation() {
-	if (canvasManager.isAnimating) {
-		canvasManager.stopAnimation();
+	if (canvasHandler.isAnimating) {
+		canvasHandler.stopAnimation();
 		button.textContent = "Resume Animation";
 	} else {
-		canvasManager.startAnimation();
+		canvasHandler.startAnimation();
 		button.textContent = "Stop Animation";
 	}
 }
