@@ -1,6 +1,8 @@
 import ShapeCollisionManager from "./ShapeCollisionManager.js";
 // TODO in general add a single/double loop and only pass callbacks here???
 // TODO - compare performance on handling single/all - and usage of callbacks. LOTS of overhead
+
+//TODO move collisionPoint drawing to collisionManager
 class CanvasManager {
 	constructor (canvas, ctx, shapes, animationCallbacks = { 'global': [], 'shape': [], 'shapes': [] }) {
 		this.canvas = canvas;

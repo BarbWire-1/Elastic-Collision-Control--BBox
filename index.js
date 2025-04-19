@@ -109,7 +109,7 @@ console.log("PocketCollision called")
 
 canvasManager.animationCallbacks = {
 	global: [ () => drawPockets(canvasManager.ctx) ],
-	shape: [ checkPocketCollision(pocketPositions, 30) ]
+	shape: [ checkPocketCollision(pocketPositions, 30) ]// shape, i passed in handler
 };
 
 
