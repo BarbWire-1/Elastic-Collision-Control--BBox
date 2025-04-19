@@ -28,8 +28,9 @@ class Shape {
 	}
 
 	update() {
-		this.position.x += this.velocity.x;
-		this.position.y += this.velocity.y;
+		const multiplier = isNaN(SPEED_MULTIPLIER) ? 1 : SPEED_MULTIPLIER;
+		this.position.x += this.velocity.x * multiplier;
+		this.position.y += this.velocity.y * multiplier;
 		this.handleBoundaryCollision();
 	}
 

@@ -11,7 +11,7 @@ export function createBillardSimulation(canvasHandler) {
 		{ x: 100, y: canvas.height / 2 },
 		ballRadius,
 		mass,
-		{ x: 10, y: 0 },
+		{ x: 10 * SPEED_MULTIPLIER, y: 0 },
 		"white"
 	);
 

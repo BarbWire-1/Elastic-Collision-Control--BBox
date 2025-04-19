@@ -14,6 +14,8 @@ import CanvasManager from "./CanvasManager.js";
 // global var, like DRAW_INFO for debugging purposes only
 globalThis.LOG = false;
 globalThis.DRAW_INFO = true;
+globalThis.SPEED_MULTIPLIER = 1.0;
+
 
 // SET UP CANVAS
 const canvas = document.getElementById("canvas");
@@ -46,3 +48,12 @@ const toggleDebugInfo = () => (DRAW_INFO = !DRAW_INFO);
 document
 	.getElementById("toggleDebugButton")
 	.addEventListener("click", toggleDebugInfo);
+
+
+const speedRange = document.getElementById("speedRange");
+const speedValue = document.getElementById("speedValue");
+
+speedRange.addEventListener("input", (e) => {
+	SPEED_MULTIPLIER = parseFloat(e.target.value);
+	speedValue.textContent = `${SPEED_MULTIPLIER.toFixed(1)}x`;
+});
