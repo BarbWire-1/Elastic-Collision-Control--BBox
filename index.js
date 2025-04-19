@@ -1,3 +1,9 @@
+/*
+* MIT License
+*
+* Copyright(c) 2025 Barbara Kälin aka BarbWire - 1
+*/
+
 // TODO implement drawing as polygons to handle collision on contourPoints instead of bbox (now simplified for testing energy-transfer only - no other physical forces applied here)
 // TODO keep shape-subclasses or add an object of drawRules by type???
 // TODO - make mixins , add physics props (worlds, materials)

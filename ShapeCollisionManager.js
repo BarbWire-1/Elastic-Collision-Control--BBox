@@ -1,3 +1,9 @@
+/*
+* MIT License
+*
+* Copyright(c) 2025 Barbara Kälin aka BarbWire - 1
+*/
+
 // TODO make this a multi-usage thingy instantiate in canvas or later mixin (???)
 
 globalThis.LOG = false; // logs collision and resolution data if true

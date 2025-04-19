@@ -1,4 +1,8 @@
-
+/*
+* MIT License
+*
+* Copyright(c) 2025 Barbara Kälin aka BarbWire - 1
+*/
 // ABSTRACT SHAPECLASS
 class Shape {
 	constructor (position, velocity, mass, color) {

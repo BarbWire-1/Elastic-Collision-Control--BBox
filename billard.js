@@ -1,3 +1,9 @@
+/*
+* MIT License
+*
+* Copyright(c) 2025 Barbara Kälin aka BarbWire - 1
+*/
+
 import { Circle } from "./Shapes.js";
 // TODO add real queue with drag control for angle and power
 
