@@ -35,11 +35,11 @@ class Shape {
 
 	handleBoundaryCollision() {
 		const bbox = this.getBoundingBox();
-		if (bbox.minX < 0 || bbox.maxX > canvas.width ) {
+		if (bbox.minX < 0 || bbox.maxX > canvas.width) {
 			this.velocity.x *= -1;
 			this.position.x += Math.sign(this.velocity.x) * 3
 		}
-		if (bbox.minY < 0 || bbox.maxY > canvas.height ) {
+		if (bbox.minY < 0 || bbox.maxY > canvas.height) {
 			this.velocity.y *= -1;
 			this.position.y += Math.sign(this.velocity.y) * 3
 		}
@@ -57,7 +57,7 @@ class Shape {
 	drawDebugInfo(ctx) {
 		if (!DRAW_INFO) return;
 		const bbox = this.getBoundingBox();
-		ctx.strokeStyle = "rgba(144, 238, 144, 0.6)"; // Light green with 30% transparency
+		ctx.strokeStyle = "rgba(144, 238, 144, 0.6)";
 		ctx.setLineDash([ 5, 5 ]);
 		ctx.strokeRect(
 			bbox.minX,
@@ -107,7 +107,7 @@ class Circle extends Shape {
 		return this.bbox;
 	}
 
-	// Implement the draw method for Circle
+
 	draw(ctx) {
 		ctx.fillStyle = this.color;
 		ctx.beginPath();
@@ -141,7 +141,7 @@ class Rectangle extends Shape {
 		return this.bbox;
 	}
 
-	// Implement the draw method for Rectangle
+
 	draw(ctx) {
 		ctx.fillStyle = this.color;
 		ctx.fillRect(
@@ -154,4 +154,4 @@ class Rectangle extends Shape {
 	}
 }
 
-export {Circle, Rectangle}
+export { Circle, Rectangle }

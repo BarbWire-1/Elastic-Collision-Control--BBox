@@ -3,7 +3,7 @@
 globalThis.LOG = false; // logs collision and resolution data if true
 // currently using bbox ONLY - later oriented bbox for pre-check, then contour
 class ShapeCollisionManager {
-	//preliminary check to pass to resolution
+	// preliminary check to pass to resolution
 	static isColliding(shape1, shape2) {
 		const bbox1 = shape1.getBoundingBox();
 		const bbox2 = shape2.getBoundingBox();
@@ -54,10 +54,10 @@ class ShapeCollisionManager {
 		let collisionPoint = undefined;
 		collisionPoint = {
 			x: shape1.position.x + direction.x * shape1.radius,
-			y: shape1.position.y + direction.y * shape1.radius ,
+			y: shape1.position.y + direction.y * shape1.radius,
 		};
 
-// TODO get relative to (mass-) center and direction to init spin
+		// TODO get relative to (mass-) center and direction to init spin
 		LOG && console.log("Collision Point:", collisionPoint);
 
 
@@ -72,7 +72,7 @@ class ShapeCollisionManager {
 		const collisionForce =
 			(totalElasticity * velocityAlongVector) / totalInverseMass;
 
-		// apply impulse to both shapes, adjusting their velocities based on their mass
+		// apply impulse to both shapes, adjusting their velocities based on share of impulse and their mass
 		[ "x", "y" ].forEach((axis) => {
 			const impulse = collisionForce * direction[ axis ];
 

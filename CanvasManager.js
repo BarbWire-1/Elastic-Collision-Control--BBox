@@ -9,8 +9,9 @@ class CanvasManager {
 		this.isAnimating = false;
 		this.animationFrameId = null;
 		this.collisionHandler = new ShapeCollisionManager();
+		// TODO separate into callback
 		this.collisionPoints = new Map(); // Store collision points in a Map for uniqueness and lifetime
-		this.lifetime = 15;
+
 		this.animationCallbacks = animationCallbacks
 	}
 
@@ -100,8 +101,8 @@ class CanvasManager {
 		this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
 	}
 
-
-	// Generate a proper star shape
+	// TODO separate and pass as callback
+	// generate star shape
 	generateStar(center, spikes, innerRadius, outerRadius) {
 		let points = [];
 		for (let i = 0; i < spikes * 2; i++) {

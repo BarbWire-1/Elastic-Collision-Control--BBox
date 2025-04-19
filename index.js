@@ -21,14 +21,14 @@ canvas.height = 500;
 
 const ballRadius = 25;
 const mass = 2;
-const spacing = ballRadius * 2 ;
+const spacing = ballRadius * 2;
 
 // Cue ball (massive velocity)
 const cueBall = new Circle(
 	{ x: 100, y: canvas.height / 2 },
 	ballRadius,
 	mass,
-	{ x: 10, y: 0 }, // Massive horizontal velocity
+	{ x: 10, y: 0 },
 	"white"
 );
 
@@ -65,12 +65,12 @@ function drawPockets(ctx) {
 	const h = canvas.height;
 
 	pocketPositions = [
-		{ x: 10, y: 10 },               // top-left
+		{ x: 10, y: 10 },             // top-left
 		{ x: w / 2, y: 0 },           // top-middle
-		{ x: w-10, y: 10 },               // top-right
-		{ x: 10, y: h -10},               // bottom-left
+		{ x: w - 10, y: 10 },         // top-right
+		{ x: 10, y: h - 10 },         // bottom-left
 		{ x: w / 2, y: h },           // bottom-middle
-		{ x: w-10, y: h-10 },               // bottom-right
+		{ x: w - 10, y: h - 10 },     // bottom-right
 	];
 
 	ctx.fillStyle = "black";
@@ -96,7 +96,7 @@ function checkPocketCollision(shapes, pocketPositions, pocketRadius) {
 			const dy = shape.position.y - pocket.y;
 			const distance = Math.sqrt(dx * dx + dy * dy);
 
-			if (distance < pocketRadius +5) {
+			if (distance < pocketRadius + 5) {
 				shapes.splice(i, 1); // Remove shape from array
 				break;
 			}
@@ -131,29 +131,3 @@ document
 	.addEventListener("click", toggleDebugInfo);
 
 
-	/*
-	document.addEventListener('keydown', (e) => {
-  if (e.key === 'd') DEBUG_INFO = !DEBUG_INFO;
-
-  class Debuggable {
-  constructor() {
-    this.DEBUG_INFO = false;
-    this._setupDebugToggle();
-  }
-
-  _setupDebugToggle() {
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'd') this.DEBUG_INFO = !this.DEBUG_INFO;
-    });
-  }
-
-  drawDebugInfo() {
-    if (this.DEBUG_INFO) {
-      // Custom debug info logic here
-      console.log("Debug info on!");
-    }
-  }
-}
-
-});
-*/
