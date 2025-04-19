@@ -1,77 +1,60 @@
 import ShapeCollisionManager from "./ShapeCollisionManager.js";
-
-// CanvasManager class for managing canvas operations
+// TODO in general add a single/double loop and only pass callbacks here???
+// TODO - compare performance on handling single/all - and usage of callbacks. LOTS of overhead
 class CanvasManager {
-	constructor (canvas, ctx, shapes, animationCallbacks = []) {
+	constructor (canvas, ctx, shapes, animationCallbacks = { 'global': [], 'shape': [], 'shapes': [] }) {
 		this.canvas = canvas;
 		this.ctx = ctx;
 		this.shapes = shapes;
 		this.isAnimating = false;
 		this.animationFrameId = null;
 		this.collisionHandler = new ShapeCollisionManager();
-		// TODO separate into callback
-		this.collisionPoints = new Map(); // Store collision points in a Map for uniqueness and lifetime
-
-		this.animationCallbacks = animationCallbacks
+		this.collisionPoints = new Map(); // store collision points in a Map for uniqueness and lifetime
+		this.animationCallbacks = animationCallbacks;
 	}
 
 	clear() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 
-	render() {
-		// Let each shape render itself
-		this.shapes.forEach((shape) => shape.draw(this.ctx));
+	// global callbacks
+	runGlobalCallbacks() {
+		for (let i = 0; i < this.animationCallbacks.global.length; i++) {
+			this.animationCallbacks.global[ i ]();
+		}
+	}
 
-		// Draw precomputed stars from the Map
-		this.collisionPoints.forEach(cp => {
-			this.ctx.beginPath();
-
-			// Draw using precomputed points
-			cp.shape.forEach((point, index) => {
-				if (index === 0) {
-					this.ctx.moveTo(point.x, point.y);
-				} else {
-					this.ctx.lineTo(point.x, point.y);
-				}
-			});
-
-			this.ctx.closePath();
-
-			// Draw yellow outline first
-			this.ctx.strokeStyle = "yellow";
-			this.ctx.lineWidth = 3;
-			this.ctx.stroke();
-
-			// Fill red inside
-			this.ctx.fillStyle = "red";
-			this.ctx.fill();
-		});
+	// shape-specific callbacks
+	runShapeCallbacks(shape, i) {
+		for (let j = 0; j < this.animationCallbacks.shape.length; j++) {
+			this.animationCallbacks.shape[ j ](shape, i);
+		}
 	}
 
 	animate() {
 		if (!this.isAnimating) return;
 		this.clear();
-		this.animationCallbacks.forEach(fn => fn())
+
 		const shapes = this.shapes;
 
+		// global callbacks before per-shape stuff
+		this.runGlobalCallbacks();
 
-
-		// Collision detection between all shape pairs
+		// single pass: update, draw, run callbacks, check collisions
 		for (let i = 0; i < shapes.length; i++) {
-
 			const shape = shapes[ i ];
-			shape.update();
-			for (let j = i + 1; j < shapes.length; j++) {
-				const shapeA = shapes[ i ];
-				const shapeB = shapes[ j ];
 
-				const collisionPoint = ShapeCollisionManager.resolveCollision(shapeA, shapeB);
+			shape.update();               // Physics / movement
+			shape.draw(this.ctx);         // Draw to canvas
+			this.runShapeCallbacks(shape, i); // Callbacks like pocket check here
+
+
+			// Collision check (only with other shapes after this one)
+			for (let j = i + 1; j < shapes.length; j++) {
+				const shapeB = shapes[ j ];
+				const collisionPoint = ShapeCollisionManager.resolveCollision(shape, shapeB);
 
 				if (collisionPoint) {
-					LOG && console.log(`Collision between shape ${i} and shape ${j} resolved.`);
-
-					// Add visual marker if new collision point
 					const key = collisionPoint;
 					if (!this.collisionPoints.has(key)) {
 						this.collisionPoints.set(key, {
@@ -87,27 +70,40 @@ class CanvasManager {
 					}
 				}
 			}
-
-
 		}
 
-		// Fade out collision stars over time
+		// Clean up collision points and draw effects
 		this.collisionPoints.forEach((cp, key) => {
 			cp.lifetime--;
-			if (cp.lifetime <= 0) this.collisionPoints.delete(key);
+			if (cp.lifetime <= 0) {
+				this.collisionPoints.delete(key);
+			} else {
+				this.ctx.beginPath();
+				cp.shape.forEach((point, index) => {
+					if (index === 0) {
+						this.ctx.moveTo(point.x, point.y);
+					} else {
+						this.ctx.lineTo(point.x, point.y);
+					}
+				});
+				this.ctx.closePath();
+				this.ctx.strokeStyle = "yellow";
+				this.ctx.lineWidth = 3;
+				this.ctx.stroke();
+				this.ctx.fillStyle = "red";
+				this.ctx.fill();
+			}
 		});
 
-		this.render();
 		this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
 	}
 
-	// TODO separate and pass as callback
 	// generate star shape
 	generateStar(center, spikes, innerRadius, outerRadius) {
-		let points = [];
+		const points = [];
 		for (let i = 0; i < spikes * 2; i++) {
-			let angle = (Math.PI * i) / spikes; // Alternate between inner & outer
-			let radius = i % 2 === 0 ? outerRadius : innerRadius;
+			const angle = (Math.PI * i) / spikes;
+			const radius = i % 2 === 0 ? outerRadius : innerRadius;
 			points.push({
 				x: center.x + Math.cos(angle) * radius,
 				y: center.y + Math.sin(angle) * radius

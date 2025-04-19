@@ -85,29 +85,32 @@ function drawPockets(ctx) {
 const shapes = [ cueBall, ...rhombusBalls ];
 const canvasManager = new CanvasManager(canvas, ctx, shapes);
 
+drawPockets(ctx)
 
+function checkPocketCollision(pocketPositions, pocketRadius) {
+console.log("PocketCollision called")
+	return (shape, i ) => {
 
-function checkPocketCollision(shapes, pocketPositions, pocketRadius) {
-	for (let i = shapes.length - 1; i >= 0; i--) {
-		const shape = shapes[ i ];
-
+		//const shape = canvasManager.shapes[i]
 		for (const pocket of pocketPositions) {
 			const dx = shape.position.x - pocket.x;
 			const dy = shape.position.y - pocket.y;
 			const distance = Math.sqrt(dx * dx + dy * dy);
 
 			if (distance < pocketRadius + 5) {
-				shapes.splice(i, 1); // Remove shape from array
+
+				canvasManager.shapes.splice(i, 1); // Remove shape
 				break;
 			}
 		}
-	}
+	};
 }
 
-canvasManager.animationCallbacks = [
-	() => drawPockets(canvasManager.ctx),
-	() => checkPocketCollision(canvasManager.shapes, pocketPositions, 30)
-];
+
+canvasManager.animationCallbacks = {
+	global: [ () => drawPockets(canvasManager.ctx) ],
+	shape: [ checkPocketCollision(pocketPositions, 30) ]
+};
 
 
 
@@ -129,5 +132,3 @@ const toggleDebugInfo = () => (DRAW_INFO = !DRAW_INFO);
 document
 	.getElementById("toggleDebugButton")
 	.addEventListener("click", toggleDebugInfo);
-
-
