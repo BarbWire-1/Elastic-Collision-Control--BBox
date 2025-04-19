@@ -7,7 +7,7 @@
 // TODO refactor and separate this "billard" playstuff to splice into canvasManager
 
 //TODO - check performance (overhead!) when bundled!!!!
-import { createBillardSimulation } from "./billard.js";
+import { billardSimulation } from "./billard.js";
 import CanvasManager from "./CanvasManager.js";
 
 
@@ -22,16 +22,14 @@ const canvas = document.getElementById("canvas");
 canvas.width = 800;
 canvas.height = 500;
 
-// CANVASHANDLER WITH COLLISIONHANDLER
-const canvasManager = new CanvasManager(canvas);
-// BILLARD
-canvasManager.factories.push(createBillardSimulation)
+// CANVASHANDLER
+const canvasHandler = new CanvasManager(canvas);
+// add billardSimulation
+canvasHandler.factories.push(billardSimulation);
+canvasHandler.init();
 
 
-canvasManager.init()
-canvasManager.initialDraw()
-
-// BUTTON STUFF
+// BUTTON AND INPUT STUFF
 const button = document.getElementById("toggleButton");
 
 function toggleAnimation() {

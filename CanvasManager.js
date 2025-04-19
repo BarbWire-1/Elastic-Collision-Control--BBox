@@ -47,6 +47,7 @@ class CanvasManager {
 
 			factory(injected);// call the factory with passed requested dependencies
 		});
+		this.initialDraw()
 	}
 	// only added for now (?) to once draw before triggering the animation
 	initialDraw() {

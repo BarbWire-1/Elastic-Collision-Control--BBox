@@ -2,9 +2,10 @@ import { Circle } from "./Shapes.js";
 // TODO add real queue with drag control for angle and power
 
 // TODO only pass ctx as arg and return all necessary for usage with handler!!!!
-
+// TODO convert to an object to pass as mixin?
 // hide cueball inputs if hasCueball, add popup : want to create a new cueBall?.... when dropped
-export function createBillardSimulation(dependencies) {
+export function billardSimulation(dependencies) {
+
 	const {
 		ctx,
 		addShape,
@@ -14,6 +15,7 @@ export function createBillardSimulation(dependencies) {
 		animationCallbacks,
 		canvas
 	} = dependencies;
+
 
 
 
@@ -142,7 +144,7 @@ export function createBillardSimulation(dependencies) {
 	callbacks.shape.push(checkPocketCollision(pocketPositions, pocketRadius))
 }
 
-createBillardSimulation.dependencies = {
+billardSimulation.dependencies = {
 	ctx: 'ctx',
 	addShape: 'addShape',
 	initialDraw: 'initialDraw',
