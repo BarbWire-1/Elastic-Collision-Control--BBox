@@ -1,5 +1,7 @@
 import { Circle } from "./Shapes.js";
 // TODO add real queue with drag control for angle and power
+
+// hide cueball inputs if hasCueball, add popup : want to create a new cueBall?.... when dropped
 export function createBillardSimulation(canvasHandler) {
 	const ctx = canvasHandler.ctx
 	const ballRadius = 20;
