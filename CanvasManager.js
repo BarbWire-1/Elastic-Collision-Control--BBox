@@ -4,9 +4,9 @@ import ShapeCollisionManager from "./ShapeCollisionManager.js";
 
 //TODO move collisionPoint drawing to collisionManager
 class CanvasManager {
-	constructor (canvas, ctx, shapes, animationCallbacks = { 'global': [], 'shape': [], 'shapes': [] }) {
+	constructor (canvas, shapes = [], animationCallbacks = { 'global': [], 'shape': [], 'shapes': [] }) {
 		this.canvas = canvas;
-		this.ctx = ctx;
+		this.ctx = canvas.getContext("2d");
 		this.shapes = shapes;
 		this.isAnimating = false;
 		this.animationFrameId = null;
@@ -18,17 +18,21 @@ class CanvasManager {
 	clear() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	}
+	addShape(shape) {
+		this.shapes.push(shape)
+	}
 
 	// global callbacks
 	runGlobalCallbacks() {
+		if (!this.animationCallbacks.global.length) return;
 		for (let i = 0; i < this.animationCallbacks.global.length; i++) {
-			this.animationCallbacks.global[ i ]();
+			this.animationCallbacks?.global[ i ]();
 		}
 	}
 
 	// shape-specific callbacks
 	runShapeCallbacks(shape, i) {
-		for (let j = 0; j < this.animationCallbacks.shape.length; j++) {
+		for (let j = 0; j < this.animationCallbacks?.shape.length; j++) {
 			this.animationCallbacks.shape[ j ](shape, i);
 		}
 	}
