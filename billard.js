@@ -4,11 +4,19 @@ import { Circle } from "./Shapes.js";
 // TODO only pass ctx as arg and return all necessary for usage with handler!!!!
 
 // hide cueball inputs if hasCueball, add popup : want to create a new cueBall?.... when dropped
-export function createBillardSimulation(canvasHandler) {
-	const ctx = canvasHandler.ctx
+export function createBillardSimulation(dependencies) {
+	const {
+		ctx,
+		addShape,
+		drawOnce,
+		shapes,
+		stopAnimation,
+		animationCallbacks,
+		canvas
+	} = dependencies;
+
 	const ballRadius = 20;
 	const mass = 1;
-
 	let hasCueBall = false;
 
 	const getCueBallVelocity = () => {
@@ -29,11 +37,10 @@ export function createBillardSimulation(canvasHandler) {
 		if (hasCueBall) return;
 		const cueBall = createCueBall();
 		cueBall.id = "cueBall";
-		canvasHandler.addShape(cueBall);
-		canvasHandler.drawOnce(); // pre-draws without animating
+		addShape(cueBall);
+		drawOnce();
 		hasCueBall = true;
 	});
-
 
 	// create balls arranged in a rhombus pattern
 	const createRhombusBalls = () => {
@@ -103,13 +110,13 @@ export function createBillardSimulation(canvasHandler) {
 
 				if (distance - 4 < pocketRadius) {
 					// Remove the ball that falls into the pocket
-					canvasHandler.shapes.splice(i, 1);
+					shapes.splice(i, 1);
 					if (shape.id === "cueBall") {
 						hasCueBall = false;
 
 						// If cueball falls, pause and sets flag to allow adding new one
 						setTimeout(() => {
-							canvasHandler.stopAnimation();
+							stopAnimation();
 						}, 50); // necessary to not stop before next frame
 					}
 					break;
@@ -125,23 +132,20 @@ export function createBillardSimulation(canvasHandler) {
 
 
 	// Add the shapes to CanvasHandler
-	balls.forEach(shape => canvasHandler.addShape(shape));
+	balls.forEach(shape => addShape(shape));
 
 	// Set up collision callbacks for the balls - hmmm.... better return methods and do that in main?
-	const callbacks = canvasHandler.animationCallbacks;
-	callbacks.global.push(() => createPockets(canvasHandler.ctx))
+	const callbacks = animationCallbacks;
+	callbacks.global.push(() => createPockets(ctx))
 	callbacks.shape.push(checkPocketCollision(pocketPositions, pocketRadius))
-
-
-
-
-		// Return the simulation components if needed
-// 		return {
-//
-// 			createPockets,
-// 			checkPocketCollision,
-// 			balls,
-// 			pocketPositions,
-// 	     pocketRadius
-// 		};
 }
+
+createBillardSimulation.dependencies = {
+	ctx: 'ctx',
+	addShape: 'addShape',
+	drawOnce: 'drawOnce',
+	shapes: 'shapes',
+	stopAnimation: 'stopAnimation',
+	animationCallbacks: 'animationCallbacks',
+	canvas: 'canvas'
+};

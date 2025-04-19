@@ -13,17 +13,57 @@ class CanvasManager {
 		this.collisionHandler = new ShapeCollisionManager();
 		this.collisionPoints = new Map(); // store collision points in a Map for uniqueness and lifetime
 		this.animationCallbacks = animationCallbacks;
+		this.factories = [];
 
-	
+
+
 	}
+	// dependency injection for loosly coupling and as a bonus allow multiple factories to be handled here
+	// TODO - check this later with existing mixin-system. That could be fun!!!
+	init() {
+		this.factories.forEach(factory => {
+			const dependencies = factory.dependencies || {};
+			const injected = {};
 
+			// Inject the requested dependencies
+			for (const key in dependencies) {
+				switch (dependencies[ key ]) {
+					case 'ctx':
+						injected[ key ] = this.ctx;
+						break;
+					case 'addShape':
+						injected[ key ] = this.addShape.bind(this);
+						break;
+					case 'drawOnce':
+						injected[ key ] = this.drawOnce.bind(this);
+						break;
+					case 'shapes':
+						injected[ key ] = this.shapes;
+						break;
+					case 'stopAnimation':
+						injected[ key ] = this.stopAnimation.bind(this);
+						break;
+					case 'animationCallbacks':
+						injected[ key ] = this.animationCallbacks;
+						break;
+					case 'canvas':
+						injected[ key ] = this.canvas;
+						break;
+					default:
+						console.warn(`Unknown dependency: ${dependencies[ key ]}`);
+				}
+			}
+
+			factory(injected); // call the factory with injected dependencies
+		});
+	}
 	drawOnce() {
 		this.clear();
 		this.runGlobalCallbacks();
 
 		for (let i = 0; i < this.shapes.length; i++) {
 			const shape = this.shapes[ i ];
-			shape.draw(this.ctx); // ❌ No update!
+			shape.draw(this.ctx);
 			this.runShapeCallbacks(shape, i);
 		}
 	}
@@ -64,9 +104,9 @@ class CanvasManager {
 		for (let i = 0; i < shapes.length; i++) {
 			const shape = shapes[ i ];
 
-			shape.update();               // Physics / movement
-			shape.draw(this.ctx);         // Draw to canvas
-			this.runShapeCallbacks(shape, i); // Callbacks like pocket check here
+			shape.update();               		// Physics / movement
+			shape.draw(this.ctx);         		// Draw to canvas
+			this.runShapeCallbacks(shape, i); 	// Callbacks like pocket check here
 
 
 			// Collision check (only with other shapes after this one)

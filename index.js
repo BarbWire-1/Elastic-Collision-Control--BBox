@@ -25,8 +25,10 @@ canvas.height = 500;
 // CANVASHANDLER WITH COLLISIONHANDLER
 const canvasManager = new CanvasManager(canvas);
 // BILLARD
-createBillardSimulation(canvasManager)
+canvasManager.factories.push(createBillardSimulation)
 
+
+canvasManager.init()
 canvasManager.drawOnce()
 
 // BUTTON STUFF
