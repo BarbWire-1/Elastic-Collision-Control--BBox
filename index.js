@@ -13,7 +13,7 @@ import CanvasManager from "./CanvasManager.js";
 
 // global var, like DRAW_INFO for debugging purposes only
 globalThis.LOG = false;
-globalThis.DRAW_INFO = false
+globalThis.DRAW_INFO = true;
 
 // SET UP CANVAS
 const canvas = document.getElementById("canvas");

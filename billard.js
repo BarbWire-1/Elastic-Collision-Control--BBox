@@ -78,7 +78,7 @@ export function createBillardSimulation(canvasHandler) {
 				const dy = shape.position.y - pocket.y;
 				const distance = Math.sqrt(dx * dx + dy * dy);
 
-				if (distance < pocketRadius + 5) {
+				if (distance -4 < pocketRadius) {
 					// Remove the ball that falls into the pocket
 					canvasHandler.shapes.splice(i, 1);
 					break;
@@ -99,8 +99,9 @@ export function createBillardSimulation(canvasHandler) {
 	shapes.forEach(shape => canvasHandler.addShape(shape));
 
 	// Set up collision callbacks for the balls
-canvasHandler.animationCallbacks.global.push(() =>createPockets(canvasHandler.ctx))
-	canvasHandler.animationCallbacks.shape.push(checkPocketCollision(pocketPositions, pocketRadius))
+	const callbacks = canvasHandler.animationCallbacks;
+callbacks.global.push(() =>createPockets(canvasHandler.ctx))
+	callbacks.shape.push(checkPocketCollision(pocketPositions, pocketRadius))
 
 
 

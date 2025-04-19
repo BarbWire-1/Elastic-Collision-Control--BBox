@@ -6,25 +6,37 @@ body {
 	flex-direction: column;
 
 	height: 100vh;
-	background-color: #f0f0f0;
+	background-color: #1a1a1a;
 	align-items: center;
+	color: white
+}
+
+* {
+	margin-left: 0;
 }
 
 button {
 	margin: 20px;
+	border-radius: 5px;
+	background-color: rgb(125, 4, 246) !important;
 }
+
 p {
 	margin: 0;
 }
+
 #canvas {
-	background-color: rgb(10, 57, 34);
+	margin-top: 20px;
+	background-color: rgb(7, 74, 42);
 	display: block;
-	margin-left: 5vw;
+
 
 	width: 80vw;
 	height: 50vw;
-	border: 40px solid rgb(58, 40, 5);
+	border: 3vw solid rgb(116, 85, 35);
 	border-radius: 20px;
+	outline: 5px solid rgb(187, 167, 35);
+	outline-offset: 1vw;
 
 
 }
@@ -34,7 +46,7 @@ p {
 	display: flex;
 	flex-direction: row;
 	width: 80vw;
-	margin-left: 10vw;
+
 }
 
 button {
