@@ -13,8 +13,8 @@
 // TODO refactor and separate this "billard" playstuff to splice into canvasManager
 
 //TODO - check performance (overhead!) when bundled!!!!
-import { billardSimulation } from "./billard.js";
-import CanvasManager from "./CanvasManager.js";
+import { billardSimulation } from "./src/billard.js";
+import CanvasManager from "./src/CanvasManager.js";
 
 
 // global var, like DRAW_INFO for debugging purposes only

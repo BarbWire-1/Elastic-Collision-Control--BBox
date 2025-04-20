@@ -56,7 +56,7 @@ export function billardSimulation(dependencies) {
 	const createRhombusBalls = () => {
 		const spacing = ballRadius * 2;
 		const rhombusBalls = [];
-		const startX = 450;
+		const startX = 490;
 		const startY = canvas.height / 2;
 		let rows = 5;
 
