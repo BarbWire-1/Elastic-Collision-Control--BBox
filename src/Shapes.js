@@ -76,24 +76,25 @@ class Shape {
 		ctx.setLineDash([]);
 
 		const vector = this.getVector();
+		ctx.strokeStyle = "black";
 		ctx.beginPath();
 		ctx.moveTo(this.position.x, this.position.y);
 		ctx.lineTo(
 			this.position.x + vector.x,
 			this.position.y + vector.y * 2
 		);
-		ctx.strokeStyle = "black";
-
 		ctx.stroke();
 
 		ctx.fillStyle = "black";
 		ctx.font = "16px Arial";
+		ctx.textAlign = "center";
+
 		ctx.fillText(
 			`KE: ${this.getKineticEnergy().toFixed(2)}`,
 			this.position.x,
 			this.position.y - 40
 		);
-		ctx.textAlign = "center";
+
 	}
 }
 

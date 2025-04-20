@@ -11,6 +11,8 @@ globalThis.LOG = false; // logs collision and resolution data if true
 class ShapeCollisionManager {
 	// preliminary check to pass to resolution
 	static isColliding(shape1, shape2) {
+
+		
 		const bbox1 = shape1.getBoundingBox();
 		const bbox2 = shape2.getBoundingBox();
 		return (
