@@ -6,7 +6,7 @@
 // ABSTRACT SHAPECLASS
 class Shape {
 	constructor (config) {
-		const { position, velocity, mass, color, margin = 0 } = config;
+		const { position, velocity, mass, color, margin = 0 , elasticity = 0.5} = config;
 		if (new.target === Shape) {
 			throw new Error(
 				"Cannot instantiate the abstract class Shape directly."
@@ -15,11 +15,15 @@ class Shape {
 
 		this.position = position;
 		this.velocity = velocity;
-		this.mass = mass;
+
 		this.color = color;
 
 		this.margin = margin;
 		this.bbox = undefined;
+
+		// TODO will be determined by material
+		this.elasticity = elasticity;
+		this.mass = mass;
 
 	}
 

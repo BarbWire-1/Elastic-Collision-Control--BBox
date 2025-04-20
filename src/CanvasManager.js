@@ -31,12 +31,12 @@ class CanvasManager {
 		const dependencyMap = {
 
 			ctx: this.ctx,
-			addShape: this.addShape.bind(this),
-			initialDraw: this.initialDraw.bind(this),
 			shapes: this.shapes,
-			stopAnimation: this.stopAnimation.bind(this),
 			animationCallbacks: this.animationCallbacks,
 			canvas: this.canvas,
+			addShape: (shape) => this.addShape(shape),
+			initialDraw: () => this.initialDraw(),
+			stopAnimation: () => this.stopAnimation(),
 		};
 
 		this.factories.forEach(factory => {
