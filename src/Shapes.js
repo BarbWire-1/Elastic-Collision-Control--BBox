@@ -5,7 +5,8 @@
 */
 // ABSTRACT SHAPECLASS
 class Shape {
-	constructor (position, velocity, mass, color, margin = 0) {
+	constructor (config) {
+		const { position, velocity, mass, color, margin = 0 } = config;
 		if (new.target === Shape) {
 			throw new Error(
 				"Cannot instantiate the abstract class Shape directly."
@@ -74,14 +75,14 @@ class Shape {
 			bbox.maxY - bbox.minY
 		);
 		ctx.setLineDash([]);
-
-		const vector = this.getVector();
+		const { x, y } = this.position;
+		const {x: vx,y: vy} = this.getVector();
 		ctx.strokeStyle = "black";
 		ctx.beginPath();
-		ctx.moveTo(this.position.x, this.position.y);
+		ctx.moveTo(x, y);
 		ctx.lineTo(
-			this.position.x + vector.x,
-			this.position.y + vector.y * 2
+			x + vx,
+			y + vy * 2
 		);
 		ctx.stroke();
 
@@ -100,29 +101,32 @@ class Shape {
 
 // SUBCLASSES
 class Circle extends Shape {
-	constructor (position, radius, mass, velocity, color, margin) {
-		super(position, velocity, mass, color, margin);
-		this.radius = radius;
+	constructor (config) {
+		super(config);
+		this.radius = config.radius
 	}
 
 	getBoundingBox() {
+		const { x, y } = this.position;
+		const r = this.radius;
 
 		this.bbox = {
-			minX: this.position.x - this.radius,
-			maxX: this.position.x + this.radius,
-			minY: this.position.y - this.radius,
-			maxY: this.position.y + this.radius
+			minX: x - r,
+			maxX: x + r,
+			minY: y - r,
+			maxY: y + r
 		};
 		return this.bbox;
 	}
 
 
 	draw(ctx) {
+		const { x, y } = this.position;
 		ctx.fillStyle = this.color;
 		ctx.beginPath();
 		ctx.arc(
-			this.position.x,
-			this.position.y,
+			x,
+			y,
 			this.radius,
 			0,
 			Math.PI * 2
@@ -140,24 +144,27 @@ class Rectangle extends Shape {
 	}
 
 	getBoundingBox() {
-
+		const { x, y } = this.position;
+		const wh = this.width/2, hh = this.height /2
 		this.bbox = {
-			minX: this.position.x - this.width / 2,
-			maxX: this.position.x + this.width / 2,
-			minY: this.position.y - this.height / 2,
-			maxY: this.position.y + this.height / 2
+			minX: x - wh,
+			maxX: x + wh,
+			minY: y - hh,
+			maxY: y + hh
 		};
 		return this.bbox;
 	}
 
 
 	draw(ctx) {
+		const w = this.width, h = this.height;
+		const { x, y } = this.position;
 		ctx.fillStyle = this.color;
 		ctx.fillRect(
-			this.position.x - this.width / 2,
-			this.position.y - this.height / 2,
-			this.width,
-			this.height
+			x - w / 2,
+			y - h / 2,
+			w,
+			h
 		);
 		this.drawDebugInfo(ctx);
 	}

@@ -50,12 +50,14 @@ export function billardSimulation(dependencies) {
 	};
 
 	const createCueBall = () => new Circle(
-		{ x: 100, y: canvas.height / 2 },
-		ballRadius,
-		mass,
-		getCueBallVelocity(),
-		"white",
-		ballRadius
+		{
+			position: { x: 100, y: canvas.height / 2 },
+			radius: ballRadius,
+			mass: mass,
+			velocity: getCueBallVelocity(),
+			color: "white",
+			margin: ballRadius
+		}
 	);
 
 	document.getElementById('createCueBall').addEventListener('click', () => {
@@ -87,14 +89,16 @@ export function billardSimulation(dependencies) {
 				rhombusBalls.push(
 					new Circle(
 						{
-							x: startX + offsetX,
-							y: startY + offsetY + j * spacing,
-						},
-						ballRadius,
-						mass,
-						{ x: 0, y: 0 },
-						`hsl(${(i * 60 + j * 20) % 360}, 100%, 50%)`,
-						ballRadius
+							position: {
+								x: startX + offsetX,
+								y: startY + offsetY + j * spacing,
+							},
+							radius: ballRadius,
+							mass: mass,
+							velocity: { x: 0, y: 0 },
+							color: `hsl(${(i * 60 + j * 20) % 360}, 100%, 50%)`,
+							margin: ballRadius
+						}
 
 					)
 				);
