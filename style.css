@@ -11,20 +11,12 @@ body {
 	color: white
 }
 
-* {
-	margin-left: 0;
-}
 
-button {
-	margin: 20px;
-	border-radius: 5px;
-	background-color: rgb(125, 4, 246) !important;
-}
 
-button:hover {
-	transform: scale(1.1);
-	box-shadow: 4px 8px 8px 0 rgba(250, 0, 179, 0.2), 2px 6px 16px 0 rgba(255,255,255, 0.05);
-}
+
+
+
+
 
 p {
 	margin: 0;
@@ -36,8 +28,10 @@ p {
 	display: block;
 
 
-	width: min(80vw , 80vh);
+	width: min(80vw, 80vh);
 	height: min(50vw, 50vh);
+	min-width: 200px;
+	min-height: 125px;
 	/*border: min(3vw, 3vh) solid rgb(116, 85, 35);*/
 	border-radius: 20px;
 	outline: 5px solid rgb(187, 167, 35);
@@ -50,7 +44,9 @@ p {
 #btnContainer {
 	display: flex;
 	flex-direction: row;
-	width: 80vw;
+	width: 80%;
+
+	justify-content: space-evenly;
 
 }
 
@@ -58,13 +54,25 @@ button {
 	top: 20px;
 	left: 20px;
 	padding: 10px 20px;
-	width: calc(40vw - 50px);
-
-	background-color: #007bff;
+	width: 25%;
+	min-width: 110px;
+	margin-top: 20px;
+	margin-bottom: 2%;
+	border-radius: 5px;
+	background-color: rgb(125, 4, 246) !important;
 	color: white;
 	border: none;
 	cursor: pointer;
-	font-size: 16px;
+	font-size: 1em;
+	text-align: center;
+	white-space: normal;
+	display: inline-block;
+
+}
+
+button:hover {
+	transform: scale(1.1);
+	box-shadow: 4px 8px 8px 0 rgba(250, 0, 179, 0.2), 2px 6px 16px 0 rgba(255, 255, 255, 0.05);
 }
 
 button:hover {

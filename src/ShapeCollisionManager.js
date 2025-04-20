@@ -8,12 +8,12 @@
 
 globalThis.LOG = false; // logs collision and resolution data if true
 
-// currently using bbox ONLY as no rotation - later oriented bbox for pre-check, then contour
+// currently using normal bbox ONLY as no rotation - later oriented bbox for pre-check, then contour OR intersection
 class ShapeCollisionManager {
 
 	// preliminary check to pass to resolution
 	static isColliding(shape1, shape2) {
-
+		if (!shape1 || !shape2) return;
 		const b1 = shape1.bbox;
 		const b2 = shape2.bbox;
 
@@ -59,7 +59,7 @@ class ShapeCollisionManager {
 			collisionNormal[ axis ] = positionDelta[ axis ] / distance;
 		});
 
-		// circle overlap check
+		// circle overlap check (currently circles Only)
 		if (distance > shape1.radius + shape2.radius) return;
 
 		// collision point on shape1's perimeter, toward shape2
@@ -78,9 +78,9 @@ class ShapeCollisionManager {
 		// skip if already moving apart
 		if (velAlongVector > 0) return;
 
-		// combined mass and elasticity for impulse calc
+		// combined mass and elasticity for impulse calc (currently perfect elastic)
 		const inverseMass = 1 / m1 + 1 / m2;
-		const elasticity = 1 + el1 + el2;
+		const elasticity = el1 + el2;
 		const impulseMagnitude = elasticity * velAlongVector / inverseMass;
 
 		// apply impulse to both shapes

@@ -14,20 +14,16 @@
 <body>
 <h1>Perfect Elastic Collision</h1>
 <p>(Impulstransfer - no loss of kinetic energy - no other physics than collision applied)</p>
-	<div id="btnContainer">
-		<button id="toggleButton">Start Animation</button>
-		<button id="toggleDebugButton">Toggle Info</button>
-		<button id="toggleLogButton">Toggle Logs</button>
-	</div>
+
+<br>
+	<label>
+		X Velocity</label>
+		<input type="number" id="vx" value="10" />
 
 	<label>
-		X Velocity:
-		<input type="number" id="vx" value="10" />
-	</label>
-	<label>
-		Y Velocity:
+		Y Velocity</label>
 		<input type="number" id="vy" value="0" />
-	</label>
+
 	<button id="createCueBall">Create Cue Ball</button>
 
 <label for="speedRange">Speed</label>
@@ -35,5 +31,11 @@
 <span id="speedValue">1.0x</span>
 
 	<canvas id="canvas"></canvas>
+	<br>
+	<div id="btnContainer">
+		<button id="toggleButton">Start Animation</button>
+		<button id="toggleDebugButton">Toggle Info</button>
+		<button id="toggleLogButton">Toggle Logs</button>
+	</div>
 </body>
 </html>
