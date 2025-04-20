@@ -5,7 +5,7 @@
 */
 // ABSTRACT SHAPECLASS
 class Shape {
-	constructor (position, velocity, mass, color) {
+	constructor (position, velocity, mass, color, margin = 0) {
 		if (new.target === Shape) {
 			throw new Error(
 				"Cannot instantiate the abstract class Shape directly."
@@ -17,6 +17,7 @@ class Shape {
 		this.mass = mass;
 		this.color = color;
 
+		this.margin = margin;
 		this.bbox = undefined;
 
 	}
@@ -40,11 +41,11 @@ class Shape {
 
 	handleBoundaryCollision() {
 		const bbox = this.getBoundingBox();
-		if (bbox.minX < 0 || bbox.maxX > canvas.width) {
+		if (bbox.minX < 0 + this.margin || bbox.maxX > canvas.width - this.margin) {
 			this.velocity.x *= -1;
 			this.position.x += Math.sign(this.velocity.x) * 3
 		}
-		if (bbox.minY < 0 || bbox.maxY > canvas.height) {
+		if (bbox.minY < 0 + this.margin || bbox.maxY > canvas.height - this.margin) {
 			this.velocity.y *= -1;
 			this.position.y += Math.sign(this.velocity.y) * 3
 		}
@@ -62,7 +63,9 @@ class Shape {
 	drawDebugInfo(ctx) {
 		if (!DRAW_INFO) return;
 		const bbox = this.getBoundingBox();
+
 		ctx.strokeStyle = "rgba(144, 238, 144, 0.6)";
+		ctx.lineWidth = 2;
 		ctx.setLineDash([ 5, 5 ]);
 		ctx.strokeRect(
 			bbox.minX,
@@ -80,7 +83,7 @@ class Shape {
 			this.position.y + vector.y * 2
 		);
 		ctx.strokeStyle = "black";
-		ctx.lineWidth = 2;
+
 		ctx.stroke();
 
 		ctx.fillStyle = "black";
@@ -96,8 +99,8 @@ class Shape {
 
 // SUBCLASSES
 class Circle extends Shape {
-	constructor (position, radius, mass, velocity, color) {
-		super(position, velocity, mass, color);
+	constructor (position, radius, mass, velocity, color, margin) {
+		super(position, velocity, mass, color, margin);
 		this.radius = radius;
 	}
 

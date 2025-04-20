@@ -27,7 +27,21 @@ export function billardSimulation(dependencies) {
 
 	const ballRadius = 20;
 	const mass = 1;
+	const pR = 30; // pocketRadius
+	const w = canvas.width;
+	const h = canvas.height;
 	let hasCueBall = false;
+
+	function createFrame(ctx) {
+		const fW = 30;
+		ctx.strokeStyle = 'rgb(116, 85, 35)';
+		ctx.lineWidth = fW;
+		ctx.strokeRect(fW / 2, fW / 2, w - fW, h - fW);
+
+		// trying to eliminate the strange thing a balls[0] by resetting
+		ctx.strokeStyle = undefined;
+		ctx.lineWidth = 0
+	}
 
 	const getCueBallVelocity = () => {
 		const vx = parseFloat(document.getElementById('vx').value);
@@ -40,7 +54,8 @@ export function billardSimulation(dependencies) {
 		ballRadius,
 		mass,
 		getCueBallVelocity(),
-		"white"
+		"white",
+		ballRadius
 	);
 
 	document.getElementById('createCueBall').addEventListener('click', () => {
@@ -68,6 +83,7 @@ export function billardSimulation(dependencies) {
 
 			// create shapes per row
 			for (let j = 0; j < numBalls; j++) {
+				ctx.globalCompositeOperator = "destination-under"
 				rhombusBalls.push(
 					new Circle(
 						{
@@ -77,38 +93,49 @@ export function billardSimulation(dependencies) {
 						ballRadius,
 						mass,
 						{ x: 0, y: 0 },
-						`hsl(${(i * 60 + j * 20) % 360}, 100%, 50%)`
+						`hsl(${(i * 60 + j * 20) % 360}, 100%, 50%)`,
+						ballRadius
+
 					)
 				);
 			}
 		}
 		return rhombusBalls;
 	};
-	const pocketRadius = 30;
+
+	const pocketPositions = [
+		{ x: pR, y: pR },             // top-left
+		{ x: w / 2, y: pR },           // top-middle
+		{ x: w - pR, y: pR },         // top-right
+		{ x: pR, y: h - pR },         // bottom-left
+		{ x: w / 2, y: h - pR },      // bottom-middle
+		{ x: w - pR, y: h - pR },     // bottom-right
+	];
 
 	const createPockets = (ctx) => {
-
-		const w = canvas.width;
-		const h = canvas.height;
-
-		const pocketPositions = [
-			{ x: 10, y: 10 },             // top-left
-			{ x: w / 2, y: 0 },           // top-middle
-			{ x: w - 10, y: 10 },         // top-right
-			{ x: 10, y: h - 10 },         // bottom-left
-			{ x: w / 2, y: h },           // bottom-middle
-			{ x: w - 10, y: h - 10 },     // bottom-right
-		];
 
 		ctx.fillStyle = "black";
 		for (const pos of pocketPositions) {
 			ctx.beginPath();
-			ctx.arc(pos.x, pos.y, pocketRadius, 0, Math.PI * 2);
+			ctx.arc(pos.x, pos.y, pR, 0, Math.PI * 2);
 			ctx.fill();
 		}
 
-		return pocketPositions;
 	};
+
+	const createPocketsCutouts = (ctx) => {
+
+		ctx.fillStyle = "black";
+		for (const pos of pocketPositions) {
+			ctx.beginPath();
+			ctx.arc(pos.x, pos.y, pR-10, 0, Math.PI * 2);
+			ctx.fill();
+		}
+
+		//return pocketPositions;
+	};
+
+
 
 	// Collision checking for when balls fall into pockets
 	const checkPocketCollision = (pocketPositions, pocketRadius) => {
@@ -136,18 +163,20 @@ export function billardSimulation(dependencies) {
 		};
 	};
 
+
+
+	// Set up collision callbacks for the balls - hmmm.... better return methods and do that in main?
+
 	// Setup the simulation components
 	const balls = createRhombusBalls();
-	const pocketPositions = createPockets(ctx);
-
+	const callbacks = animationCallbacks;
 
 	// Add the shapes to CanvasHandler
 	balls.forEach(shape => addShape(shape));
-
-	// Set up collision callbacks for the balls - hmmm.... better return methods and do that in main?
-	const callbacks = animationCallbacks;
 	callbacks.global.push(() => createPockets(ctx))
-	callbacks.shape.push(checkPocketCollision(pocketPositions, pocketRadius))
+	callbacks.global.push(() => createFrame(ctx));
+	callbacks.global.push(() => createPocketsCutouts(ctx))
+	callbacks.shape.push(checkPocketCollision(pocketPositions, pR))
 }
 
 billardSimulation.dependencies = {
