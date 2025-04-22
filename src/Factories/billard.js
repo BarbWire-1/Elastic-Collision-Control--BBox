@@ -4,7 +4,7 @@
 * Copyright(c) 2025 Barbara Kälin aka BarbWire - 1
 */
 
-import { Circle } from "./Shapes.js";
+import { Circle } from "../Canvas/Shapes.js";
 // TODO add real queue with drag control for angle and power
 
 // TODO only pass ctx as arg and return all necessary for usage with handler!!!!
@@ -56,7 +56,8 @@ export function billardSimulation(dependencies) {
 			mass: mass,
 			velocity: getCueBallVelocity(),
 			color: "white",
-			margin: ballRadius
+			margin: ballRadius,
+			elasticity: 1
 		}
 	);
 

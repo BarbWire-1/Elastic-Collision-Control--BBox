@@ -1,8 +1,13 @@
 .qodo/
 .vscode/
+.DS_Store/
+
+
+# concepts ideas
 *.txt
 Examples/
 compare.js
 compare2.js
 
 orchestrator.md
+*_test.js

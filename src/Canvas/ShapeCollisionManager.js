@@ -4,12 +4,13 @@
 * Copyright(c) 2025 Barbara Kälin aka BarbWire - 1
 */
 
+
 // TODO make this a multi-usage thingy instantiate in canvas or later mixin (???)
 
 globalThis.LOG = false; // logs collision and resolution data if true
 
 // currently using normal bbox ONLY as no rotation - later oriented bbox for pre-check, then contour OR intersection
-class ShapeCollisionManager {
+class CollisionManager {
 
 	// preliminary check to pass to resolution
 	static isColliding(shape1, shape2) {
@@ -38,13 +39,15 @@ class ShapeCollisionManager {
 
 		LOG && console.log("bbox collision detected");
 
-		const { position: p1, velocity: v1, mass: m1, elasticity: el1 } = shape1;
-		const { position: p2, velocity: v2, mass: m2, elasticity: el2 } = shape2;
+		const { position: p1, velocity: v1, mass: m1, elasticity: el1, radius: radius1 } = shape1;
+		const { position: p2, velocity: v2, mass: m2, elasticity: el2, radius: radius2 } = shape2;
 
 		let positionDelta = {};
 		let relativeVelocity = {};
 		let collisionNormal = {};
 		let collisionPoint;
+
+
 
 		// get position offset and relative velocity
 		[ "x", "y" ].forEach(axis => {
@@ -68,6 +71,11 @@ class ShapeCollisionManager {
 			y: p1.y + collisionNormal.y * shape1.radius,
 		};
 
+	//collisionPoint = CollisionManager.circle2Circle(p1, shape1.radius, shape2.radius, distance, collisionNormal);
+
+
+		//TODO circle2other use perimeterPoint and isPointInShape? or tangente?
+
 		LOG && console.log("Collision Point:", collisionPoint);
 
 		// calculate the relative (rest) velocity along the collision vector
@@ -87,13 +95,56 @@ class ShapeCollisionManager {
 		[ "x", "y" ].forEach(axis => {
 			const impulse = impulseMagnitude * collisionNormal[ axis ];
 
-			v1[ axis ] += impulse / m1;
-			v2[ axis ] -= impulse / m2;
+			v1[ axis ] += impulse / m1 ;
+			v2[ axis ] -= impulse / m2 ;
 		});
 
 		return collisionPoint || true;
 	}
+	static circle2Circle(p1, r1, r2, distance, collisionNormal) {
+		// circle overlap check (currently circles Only)
+		if (distance > r1 + r2) return;
+
+		// collision point on shape1's perimeter, toward shape2
+		return {
+			x: p1.x + collisionNormal.x * r1,
+			y: p1.y + collisionNormal.y * r1,
+		};
+
+	}
+		/*
+		if (shape1.type === 'circle' || shape2.type === 'circle') {
+                    // Ensure shape1 is the circle, swap if needed
+                    if (shape1.type !== 'circle') {
+                         const temp = shape1;
+                         shape1 = shape2;
+                         shape2 = temp;
+                         // Flip the normal direction by changing the sign when swapping shapes
+                         normalSign = -1;
+                    }
+                    // Now shape1 is guaranteed to be the circle
+                    collisionPoint = {
+                         x: shape1.center.x + collisionNormal.x * shape1.radius * normalSign,
+                         y: shape1.center.y + collisionNormal.y * shape1.radius * normalSign,
+                    };
+
+
+					// Circle-to-Rectangle intersection check
+          function checkCircleRectangleIntersection(circle, rectangle, collisionPoint) {
+               const edges = Vector.createEdgesFromPoints(rectangle.points);
+               // Check for intersection between the collision point and the edges of the rectangle
+               for (let edge of edges) {
+                    if (Vector.isPointOnSegment(collisionPoint, edge.start, edge.end)) {
+                         return true; // Collision detected on the edge
+                    }
+               }
+               return false; // No intersection
+          }
+					*/
+
+
+
 
 }
 
-export default ShapeCollisionManager;
+export default CollisionManager;

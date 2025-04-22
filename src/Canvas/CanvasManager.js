@@ -4,7 +4,7 @@
 * Copyright(c) 2025 Barbara Kälin aka BarbWire - 1
 */
 
-import ShapeCollisionManager from "./ShapeCollisionManager.js";
+import CollisionManager from "./ShapeCollisionManager.js";
 // TODO in general add a single/double loop and only pass callbacks here???
 // TODO - compare performance on handling single/all - and usage of callbacks. LOTS of overhead
 
@@ -16,8 +16,8 @@ class CanvasManager {
 		this.shapes = shapes;
 		this.isAnimating = false;
 		this.animationFrameId = null;
-		this.collisionHandler = new ShapeCollisionManager();
-		this.collisionPoints = new Map(); // store collision points in a Map for uniqueness and lifetime
+		this.collisionHandler = new CollisionManager();
+		this.collisionPoints = new Map(); // store collision points in a Map for uniqueness and lifetime _ for drawing
 		this.animationCallbacks = animationCallbacks;
 		this.factories = [];
 
@@ -110,7 +110,7 @@ class CanvasManager {
 			// Collision check (only with other shapes after this one)
 			for (let j = i + 1; j < shapes.length; j++) {
 				const shapeB = shapes[ j ];
-				const collisionPoint = ShapeCollisionManager.resolveCollision(shape, shapeB);
+				const collisionPoint = CollisionManager.resolveCollision(shape, shapeB);
 
 				collisionPoint && this.handleCollisionPoint(collisionPoint);
 
@@ -121,7 +121,7 @@ class CanvasManager {
 
 		this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
 	}
-
+	// JUST debug - could also outsource
 	// create a star at point as long as stored
 	handleCollisionPoint(collisionPoint) {
 		const key = collisionPoint;
