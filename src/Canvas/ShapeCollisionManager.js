@@ -12,6 +12,7 @@ globalThis.LOG = false; // logs collision and resolution data if true
 // currently using normal bbox ONLY as no rotation - later oriented bbox for pre-check, then contour OR intersection
 class CollisionManager {
 
+	// TODO this sometimes!!!!!!!!!! throws when creating new cueBall, debug!!
 	// preliminary check to pass to resolution
 	static isColliding(shape1, shape2) {
 		if (!shape1 || !shape2) return;
