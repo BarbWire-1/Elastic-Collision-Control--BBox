@@ -118,8 +118,13 @@ class CanvasManager {
 			}
 		}
 		// => draw collisionMarks for lifetime, then delete point
-		this.handleCollisionPointsLifeCycle()
+		this.handleCollisionPointsLifeCycle();
 
+		// Calculate total kinetic energy
+		if (LOG) {
+			const totalKE = shapes.reduce((sum, shape) => sum + shape.getKineticEnergy(), 0);
+			console.log("Total Kinetic Energy:", totalKE.toFixed(2));
+		}
 		this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
 	}
 	// JUST debug - could also outsource

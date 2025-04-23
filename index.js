@@ -52,9 +52,14 @@ function toggleAnimation() {
 button.addEventListener("click", toggleAnimation);
 
 const toggleDebugInfo = () => (DRAW_INFO = !DRAW_INFO);
+const toggleLogs = () => LOG = !LOG;
 document
 	.getElementById("toggleDebugButton")
 	.addEventListener("click", toggleDebugInfo);
+
+document
+	.getElementById("toggleLogButton")
+	.addEventListener("click", toggleLogs);
 
 
 const speedRange = document.getElementById("speedRange");

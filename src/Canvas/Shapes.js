@@ -141,10 +141,10 @@ class Circle extends Shape {
 }
 
 class Rectangle extends Shape {
-	constructor (position, width, height, mass, velocity, color) {
-		super(position, velocity, mass, color);
-		this.width = width;
-		this.height = height;
+	constructor (config) {
+		super(config);
+		this.width = config.width;
+		this.height = config.height;
 	}
 
 	getBoundingBox() {

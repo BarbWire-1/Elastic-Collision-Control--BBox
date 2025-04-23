@@ -40,7 +40,7 @@ class CollisionManager {
 
 		if (!this.isColliding(shape1, shape2)) return;
 
-		LOG && console.log("bbox collision detected");
+		//LOG && console.log("bbox collision detected");
 
 		const { position: p1, velocity: v1, mass: m1, elasticity: el1, radius: radius1 } = shape1;
 		const { position: p2, velocity: v2, mass: m2, elasticity: el2, radius: radius2 } = shape2;
@@ -79,7 +79,7 @@ class CollisionManager {
 
 		//TODO circle2other use perimeterPoint and isPointInShape? or tangente?
 
-		LOG && console.log("Collision Point:", collisionPoint);
+		//LOG && console.log("Collision Point:", collisionPoint);
 
 		// calculate the relative (rest) velocity along the collision vector
 		const velAlongVector =
