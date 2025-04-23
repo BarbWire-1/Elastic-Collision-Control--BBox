@@ -101,10 +101,10 @@ export function billardSimulation(dependencies) {
 		const angleDeg = parseFloat(angleInput.value);
 		const power = parseFloat(powerInput.value);
 		const angleRad = angleDeg * (Math.PI / 180);
-		const SPEED_MULTIPLIER = 0.25;
+		const SPEED_MULTIPLIER = .2;
 
 		return {
-			x: Math.cos(angleRad) * power * SPEED_MULTIPLIER,
+			x: Math.cos(angleRad)  * power * SPEED_MULTIPLIER,
 			y: Math.sin(angleRad) * power * SPEED_MULTIPLIER
 		};
 	}
