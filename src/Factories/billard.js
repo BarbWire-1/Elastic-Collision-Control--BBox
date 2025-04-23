@@ -74,9 +74,11 @@ export function billardSimulation(dependencies) {
 	angleInput.addEventListener('input', updateAimLine);
 	powerInput.addEventListener('input', updateAimLine);
 	shootBtn.addEventListener('click', () => {
-		if (!cueBall) return;
+		if (hasCueBall) return;
 		cueBall.velocity = getCueBallVelocity();
 		aiming = false;
+		cueBallSetupDiv.style.display = 'none';
+		hasCueBall = true;
 
 	});
 	cueXInput.addEventListener('input', updateCueBallPosition);
@@ -123,7 +125,7 @@ export function billardSimulation(dependencies) {
 	}
 	// drawn when setup angle and power before shoot
 	function updateAimLine() {
-		if (!hasCueBall || !aiming) return;
+		if ( !aiming) return;
 
 		const angle = parseFloat(angleInput.value);
 		const power = parseFloat(powerInput.value);
@@ -132,7 +134,7 @@ export function billardSimulation(dependencies) {
 	}
 
 	function drawAimLine(ctx, origin, angleDeg, power) {
-		if (!hasCueBall) return;
+		
 		const angleRad = angleDeg * (Math.PI / 180);
 		const length = power * 3;
 		const endX = origin.x + Math.cos(angleRad) * length;
@@ -160,7 +162,7 @@ export function billardSimulation(dependencies) {
 		});
 		cueBall.id = "cueBall";
 		addShape(cueBall);
-		hasCueBall = true;
+
 		initialDraw();
 		updateAimLine();
 	}
