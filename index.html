@@ -1,36 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="style.css">
 
 
-<!--	<script src="./Examples/billard.js" type="module"></script> -->
+	<!--	<script src="./Examples/billard.js" type="module"></script> -->
 
-<script type="module" src="index.js"></script>
+	<script type="module" src="index.js"></script>
 	<title>Elastic Collision Control - Circles</title>
 </head>
+
 <body>
-<h1>Perfect Elastic Collision</h1>
-<p>(Impulstransfer - no loss of kinetic energy - no friction or damping applied)</p>
+	<h1>Perfect Elastic Collision</h1>
+	<p>(Impulstransfer - no loss of kinetic energy - no friction or damping applied)</p>
 
-<br>
-
-
+	<br>
 	<button id="shootButton">Shoot</button>
-<div id="cueBallSetup" style="display:none; margin-top: 10px;">
-	<label>X: <input id="cueX" type="number" min="0" max="400" value="100" /></label>
-	<label>Y: <input id="cueY" type="number" min="0" max="600" value="200" /></label>
-</div>
+	<div id="cueBallSettings">
 
-<label for="angle">Angle</label>
-	<input type="number" id="angle" placeholder="Angle (degrees)" min = "-359" max ="359" value="0"/>
-	<label for="power">Power (0-100)</label>
-	<input type="number" id="power" placeholder="Power (0-100)" min="0" max="100" value="50" />
-	<!-- Optional: Impact angle for spin-->
+		<div id="cueBallSetup" style="display:none;">
+			<div>
+				<p>X:</p>
 
+				<input id="cueX" type="number" min="0" max="400" value="100" />
+			</div>
+			<div>
+				<p>Y:</p>
+				<input id="cueY" type="number" min="0" max="600" value="200" />
+			</div>
+		</div>
+		<div>
+			<p>Angle</p>
+			<input type="number" id="angle" placeholder="Angle (degrees)" min="-359" max="359" value="0" />
+		</div>
 
+		<div>
+			<p>Power (0-100)</p>
+			<input type="number" id="power" placeholder="Power (0-100)" min="0" max="100" value="50" />
+		</div>
+		<!-- Optional: Impact angle for spin-->
+	</div>
+	<br>
+	<input type="range" id="speedRange" min="0.1" step="0.1" max="2" value="1">
+	<p id="speedValue">Speed: 1.0x</p>
 	<canvas id="canvas"></canvas>
 	<br>
 	<div id="btnContainer">
@@ -39,4 +54,5 @@
 		<!-- <button id="toggleLogButton">Toggle Logs</button> -->
 	</div>
 </body>
+
 </html>

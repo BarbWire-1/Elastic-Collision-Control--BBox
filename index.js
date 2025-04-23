@@ -57,3 +57,10 @@ document
 	.addEventListener("click", toggleDebugInfo);
 
 
+const speedRange = document.getElementById("speedRange");
+const speedValue = document.getElementById("speedValue");
+
+speedRange.addEventListener("input", (e) => {
+	SPEED_MULTIPLIER = parseFloat(e.target.value);
+	speedValue.textContent = `${SPEED_MULTIPLIER.toFixed(1)}x`;
+});
