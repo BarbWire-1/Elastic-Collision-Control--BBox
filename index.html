@@ -25,21 +25,21 @@
 			<div>
 				<p>X:</p>
 
-				<input id="cueX" type="number" min="0" max="400" value="100" />
+				<input id="cueX" type="range" min="0" max="400" value="100" />
 			</div>
 			<div>
 				<p>Y:</p>
-				<input id="cueY" type="number" min="0" max="600" value="250" />
+				<input id="cueY" type="range" min="0" max="600" value="250" />
 			</div>
 		</div>
 		<div>
 			<p>Angle</p>
-			<input type="number" id="angle" placeholder="Angle (degrees)" min="-359" max="359" value="0" />
+			<input type="range" id="angle" placeholder="Angle (degrees)" min="-359" max="359" value="0" />
 		</div>
 
 		<div>
 			<p>Power (0-100)</p>
-			<input type="number" id="power" placeholder="Power (0-100)" min="0" max="100" value="50" />
+			<input type="range" id="power" placeholder="Power (0-100)" min="0" max="100" value="50" />
 		</div>
 		<!-- Optional: Impact angle for spin-->
 	</div>
@@ -51,7 +51,7 @@
 	<div id="btnContainer">
 		<button id="toggleButton">Pause Animation</button>
 		<button id="toggleDebugButton">Toggle Info</button>
-		 <button id="toggleLogButton">Toggle Logs</button> 
+		 <button id="toggleLogButton">Toggle Logs</button>
 	</div>
 </body>
 
