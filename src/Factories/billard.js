@@ -227,7 +227,7 @@ export function billardSimulation(dependencies) {
 						shapes.forEach(s => s.velocity = { x: 0, y: 0 });
 						setTimeout(() => {
 
-							cueBallSetupDiv.style.display = 'block';
+							cueBallSetupDiv.style.display = 'flex';
 							createCueball();
 
 
@@ -244,7 +244,7 @@ export function billardSimulation(dependencies) {
 	// Setup and Run
 	// ======================
 	const balls = createRhombusBalls();
-	
+	const callbacks = animationCallbacks;
 
 	createCueball();
 
@@ -269,6 +269,6 @@ billardSimulation.dependencies = {
 	shapes: 'shapes',
 	stopAnimation: 'stopAnimation',
 	startAnimation: 'startAnimation',
-	animationCallbacks: 'callbacks',
+	animationCallbacks: 'animationCallbacks',
 	canvas: 'canvas'
 };
