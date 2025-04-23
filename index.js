@@ -44,7 +44,7 @@ function toggleAnimation() {
 		button.textContent = "Resume Animation";
 	} else {
 		canvasHandler.startAnimation();
-		button.textContent = "Stop Animation";
+		button.textContent = "Pause Animation";
 	}
 }
 
