@@ -16,6 +16,8 @@ class CollisionManager {
 	// preliminary check to pass to resolution
 	static isColliding(shape1, shape2) {
 		if (!shape1 || !shape2) return;
+
+		if (shape1.velocity.x === 0 && shape1.velocity.y === 0 && shape2.velocity.x === 0 && shape2.velocity.y === 0 ) return;
 		const b1 = shape1.bbox;
 		const b2 = shape2.bbox;
 

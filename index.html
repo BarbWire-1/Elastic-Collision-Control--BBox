@@ -13,34 +13,30 @@
 </head>
 <body>
 <h1>Perfect Elastic Collision</h1>
-<p>(Impulstransfer - no loss of kinetic energy - no other physics than collision applied)</p>
+<p>(Impulstransfer - no loss of kinetic energy - no friction or damping applied)</p>
 
 <br>
-	<label>
-		X Velocity</label>
-		<input type="number" id="vx" value="10" />
-
-	<label>
-		Y Velocity</label>
-		<input type="number" id="vy" value="0" />
-
-	<button id="createCueBall">Create Cue Ball</button>
 
 
-	<!-- <input type="number" id="angle" placeholder="Angle (degrees)" />
-	<input type="number" id="power" placeholder="Power (0-100)" /> -->
-	<!-- Optional: Impact angle for spin -->
+	<button id="shootButton">Shoot</button>
+<div id="cueBallSetup" style="display:none; margin-top: 10px;">
+	<label>X: <input id="cueX" type="number" min="0" max="400" value="100" /></label>
+	<label>Y: <input id="cueY" type="number" min="0" max="600" value="200" /></label>
+</div>
 
-<label for="speedRange">Speed</label>
-<input type="range" id="speedRange" min="0.1" max="2" step="0.1" value="1">
-<span id="speedValue">1.0x</span>
+<label for="angle">Angle</label>
+	<input type="number" id="angle" placeholder="Angle (degrees)" min = "-359" max ="359" value="0"/>
+	<label for="power">Power (0-100)</label>
+	<input type="number" id="power" placeholder="Power (0-100)" min="0" max="100" value="50" />
+	<!-- Optional: Impact angle for spin-->
+
 
 	<canvas id="canvas"></canvas>
 	<br>
 	<div id="btnContainer">
 		<button id="toggleButton">Start Animation</button>
 		<button id="toggleDebugButton">Toggle Info</button>
-		<button id="toggleLogButton">Toggle Logs</button>
+		<!-- <button id="toggleLogButton">Toggle Logs</button> -->
 	</div>
 </body>
 </html>

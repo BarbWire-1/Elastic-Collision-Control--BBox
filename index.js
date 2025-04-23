@@ -13,13 +13,13 @@
 // TODO refactor and separate this "billard" playstuff to splice into canvasManager
 
 //TODO - check performance (overhead!) when bundled!!!!
-import { billardSimulation } from "./src/Factories/billard.js";
+import { billardSimulation } from "./src/Factories/billard_test.js";
 import CanvasManager from "./src/Canvas/CanvasManager.js";
 
 
 // global var, like DRAW_INFO for debugging purposes only
 globalThis.LOG = false;
-globalThis.DRAW_INFO = true;
+globalThis.DRAW_INFO = false;
 globalThis.SPEED_MULTIPLIER = 1.0;
 
 
@@ -57,10 +57,3 @@ document
 	.addEventListener("click", toggleDebugInfo);
 
 
-const speedRange = document.getElementById("speedRange");
-const speedValue = document.getElementById("speedValue");
-
-speedRange.addEventListener("input", (e) => {
-	SPEED_MULTIPLIER = parseFloat(e.target.value);
-	speedValue.textContent = `${SPEED_MULTIPLIER.toFixed(1)}x`;
-});

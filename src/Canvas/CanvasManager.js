@@ -37,6 +37,7 @@ class CanvasManager {
 			addShape: (shape) => this.addShape(shape),
 			initialDraw: () => this.initialDraw(),
 			stopAnimation: () => this.stopAnimation(),
+			startAnimation: () => this.startAnimation()
 		};
 
 		this.factories.forEach(factory => {
