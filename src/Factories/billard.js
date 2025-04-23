@@ -160,7 +160,9 @@ export function billardSimulation(dependencies) {
 						setTimeout(() => {
 							stopAnimation();
 						}, 50); // necessary to not stop before next frame
+						shapes.forEach(s => s.velocity = { x: 0, y: 0 })
 					}
+
 					break;
 				}
 
