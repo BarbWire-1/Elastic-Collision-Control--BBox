@@ -161,7 +161,7 @@ const newShootBtn = document.getElementById("newShoot")
 			mass: mass,
 			velocity: { x: 0, y: 0 },
 			color: "white",
-			margin: ballRadius,
+			margin: ballRadius + 10,
 			elasticity: 1
 		});
 		cueBall.id = "cueBall";
@@ -195,7 +195,7 @@ const newShootBtn = document.getElementById("newShoot")
 					mass: mass,
 					velocity: { x: 0, y: 0 },
 					color: `hsl(${(i * 60 + j * 20) % 360}, 100%, 50%)`,
-					margin: ballRadius + 15
+					margin: ballRadius + 10
 				}));
 			}
 		}
