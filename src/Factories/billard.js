@@ -243,14 +243,19 @@ const newShootBtn = document.getElementById("newShoot")
 				const dx = shape.position.x - pocket.x;
 				const dy = shape.position.y - pocket.y;
 				const distance = Math.sqrt(dx * dx + dy * dy);
-				if (distance - 4 < pocketRadius) {
-					shapes.splice(i, 1);
-					shape.id === "cueBall" && newShoot()
+
+				// Check if the ball is within the pocket radius
+				if (distance < pocketRadius + 10) {
+					shapes.splice(i, 1); // Remove shape from the array
+					if (shape.id === "cueBall") {
+						newShoot(); // Reset the cue ball
 					}
-					break;
+					break; // Exit the loop after handling collision
 				}
 			}
 		};
+	}
+
 
 
 	// ======================
