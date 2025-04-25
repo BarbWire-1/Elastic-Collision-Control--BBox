@@ -50,6 +50,12 @@ export function billardSimulation(dependencies) {
 		{ x: w - pR, y: h - pR }, 	// Bottom-right pocket
 	];
 
+	let cueBall = null;
+
+	// flags
+	let hasCueBall = false;
+	let aiming = false;
+
 
 	// ======================
 	//  DOM Elements
@@ -57,8 +63,9 @@ export function billardSimulation(dependencies) {
 	const cueBallSetupDiv = document.getElementById('cueBallSetup');
 	const angleInput = document.getElementById('angleInput');
 	const powerInput = document.getElementById('powerInput');
-	const shootBtn = document.getElementById('shootButton');
-	const newShootBtn = document.getElementById("newShoot");
+	const cueXInput = document.getElementById('cueXInput');
+	const cueYInput = document.getElementById('cueYInput');
+
 
 	// ======================
 	//  Event Delegation
@@ -81,9 +88,13 @@ export function billardSimulation(dependencies) {
 	function handleClickEvent(event) {
 		const target = event.target;
 
-		target === shootBtn && shootCueBall();
-		target === newShootBtn && newShoot();
+		if (target.id === 'shootButton') {
+			shootCueBall();
+		}
 
+		if (target.id === 'newShoot') {
+			newShoot();
+		}
 	}
 
 	// ======================
@@ -136,21 +147,21 @@ export function billardSimulation(dependencies) {
 	function updateCueBallPosition() {
 		const x = parseFloat(cueXInput.value);
 		const y = parseFloat(cueYInput.value);
-
+console.log(x,y)
 		// cue ballwithin the left half of the table
 		if (x >= 0 && x <= canvas.width / 2 && y >= 0 && y <= canvas.height) {
-			if (cueBall) {
+
 				cueBall.position = { x, y };
 
-			}
+
 		}
 	}
 	// drawn when setup angle and power before shoot
 	function updateAimLine() {
 		if (!aiming) return;
 
-		const angle = parseFloat(document.getElementById("angleInput").value);
-		const power = parseFloat(document.getElementById("powerInput").value);
+		const angle = parseFloat(angleInput.value);
+		const power = parseFloat(powerInput.value);
 		drawAimLine(ctx, cueBall.position, angle, power);
 
 	}
