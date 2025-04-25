@@ -7,9 +7,7 @@
 import { Circle } from "../Collision/CollidingShapes.js";
 
 
-// TODO only pass ctx as arg and return all necessary for usage with handler!!!!
-// TODO convert to an object to pass as mixin?
-
+// TODO go with the dependency approach? - test adding another layer of coordinating drawSequence
 // TODO - add dumping/friction?
 // or keep as is for elastic collision demonstartion?
 
@@ -19,7 +17,9 @@ export function billardSimulation(dependencies) {
 	// ============================
 	//  Destructured Dependencies
 	// ============================
-	// props and methods used from the canvasManager
+	// Destructuring the required methods and properties from dependencies
+	// These come from the CanvasManager and are used for drawing on the canvas
+
 	const {
 		ctx,
 		addShape,
@@ -31,66 +31,67 @@ export function billardSimulation(dependencies) {
 	// ======================
 	//  Variables
 	// ======================
-
+	// Canvas dimensions
 	const w = canvas.width;
 	const h = canvas.height;
 
+	// Ball radius and mass
 	const ballRadius = 20;
 	const mass = 1;
 	const pR = 30; // pocket radius
 
-	let cueBall = null;
-	let hasCueBall = false;
-	let aiming = true;
-
+	// Pocket positions (coordinates of the pockets on the table)
 	const pocketPositions = [
-		{ x: pR, y: pR },
-		{ x: w / 2, y: pR },
-		{ x: w - pR, y: pR },
-		{ x: pR, y: h - pR },
-		{ x: w / 2, y: h - pR },
-		{ x: w - pR, y: h - pR },
+		{ x: pR, y: pR }, 			// Top-left pocket
+		{ x: w / 2, y: pR }, 		// Top-center pocket
+		{ x: w - pR, y: pR }, 		// Top-right pocket
+		{ x: pR, y: h - pR }, 		// Bottom-left pocket
+		{ x: w / 2, y: h - pR }, 	// Bottom-center pocket
+		{ x: w - pR, y: h - pR }, 	// Bottom-right pocket
 	];
+
 
 	// ======================
 	//  DOM Elements
 	// ======================
-	// initially hidden, only after cueball fallen first time to position
 	const cueBallSetupDiv = document.getElementById('cueBallSetup');
-	const cueXInput = cueBallSetupDiv.querySelector('#cueX');
-	const cueYInput = cueBallSetupDiv.querySelector('#cueY');
-
-	// plan the shoot...
-	const angleInput = document.getElementById('angle');
-	const powerInput = document.getElementById('power');
+	const angleInput = document.getElementById('angleInput');
+	const powerInput = document.getElementById('powerInput');
 	const shootBtn = document.getElementById('shootButton');
+	const newShootBtn = document.getElementById("newShoot");
 
-	// stop and add new cueball
-	const newShootBtn = document.getElementById("newShoot")
 	// ======================
-	//  Event Listeners
+	//  Event Delegation
 	// ======================
-	angleInput.addEventListener('input', updateAimLine);
-	powerInput.addEventListener('input', updateAimLine);
-	shootBtn.addEventListener('click', () => {
-		if (hasCueBall) return;
-		cueBall.velocity = getCueBallVelocity();
-		aiming = false;
-		cueBallSetupDiv.style.display = 'none';
-		hasCueBall = true;
+	document.addEventListener('input', handleInputEvent);
+	document.addEventListener('click', handleClickEvent);
 
-	});
+	function handleInputEvent(event) {
+		const target = event.target;
 
-	newShootBtn.addEventListener('click', newShoot)
-	cueXInput.addEventListener('input', updateCueBallPosition);
-	cueYInput.addEventListener('input', updateCueBallPosition);
+		if (target === angleInput || target === powerInput) {
+			updateAimLine();
+		}
 
+		if (target === cueXInput || target === cueYInput) {
+			updateCueBallPosition();
+		}
+	}
 
+	function handleClickEvent(event) {
+		const target = event.target;
 
+		target === shootBtn && shootCueBall();
+		target === newShootBtn && newShoot();
+
+	}
 
 	// ======================
 	//  Functions
 	// ======================
+
+	// create canvas elements
+	// static
 	function createFrame(ctx) {
 		const fW = 30;
 		ctx.strokeStyle = 'rgb(116, 85, 35)';
@@ -100,6 +101,26 @@ export function billardSimulation(dependencies) {
 		ctx.lineWidth = 0;
 	}
 
+	function createPockets(ctx) {
+		ctx.fillStyle = "black";
+		for (const pos of pocketPositions) {
+			ctx.beginPath();
+			ctx.arc(pos.x, pos.y, pR, 0, Math.PI * 2);
+			ctx.fill();
+		}
+	}
+
+	function createPocketsCutouts(ctx) {
+		ctx.fillStyle = "black";
+		for (const pos of pocketPositions) {
+			ctx.beginPath();
+			ctx.arc(pos.x, pos.y, pR - 10, 0, Math.PI * 2);
+			ctx.fill();
+		}
+	}
+
+	// animated
+	// balls passed to shape for collisionCheck and -handling
 	function getCueBallVelocity() {
 		const angleDeg = parseFloat(angleInput.value);
 		const power = parseFloat(powerInput.value);
@@ -128,8 +149,8 @@ export function billardSimulation(dependencies) {
 	function updateAimLine() {
 		if (!aiming) return;
 
-		const angle = parseFloat(angleInput.value);
-		const power = parseFloat(powerInput.value);
+		const angle = parseFloat(document.getElementById("angleInput").value);
+		const power = parseFloat(document.getElementById("powerInput").value);
 		drawAimLine(ctx, cueBall.position, angle, power);
 
 	}
@@ -162,13 +183,12 @@ export function billardSimulation(dependencies) {
 			elasticity: 1
 		});
 		cueBall.id = "cueBall";
-		addShape(cueBall);
 
-		//initialDraw();
+		addShape(cueBall);
 		updateAimLine();
 	}
 
-
+	// setup other balls - here 9 in a rhombus
 	function createRhombusBalls() {
 		const spacing = ballRadius * 2;
 		const rhombusBalls = [];
@@ -199,24 +219,17 @@ export function billardSimulation(dependencies) {
 		return rhombusBalls;
 	}
 
-	function createPockets(ctx) {
-		ctx.fillStyle = "black";
-		for (const pos of pocketPositions) {
-			ctx.beginPath();
-			ctx.arc(pos.x, pos.y, pR, 0, Math.PI * 2);
-			ctx.fill();
-		}
-	}
+	// play
+	function shootCueBall() {
+		if (hasCueBall) return;
+		cueBall.velocity = getCueBallVelocity();
+		aiming = false;
+		cueBallSetupDiv.style.display = 'none';// hide if ball in game
+		hasCueBall = true;
 
-	function createPocketsCutouts(ctx) {
-		ctx.fillStyle = "black";
-		for (const pos of pocketPositions) {
-			ctx.beginPath();
-			ctx.arc(pos.x, pos.y, pR - 10, 0, Math.PI * 2);
-			ctx.fill();
-		}
-	}
+}
 
+	// stop all balls and create new cueBall
 	function newShoot() {
 		hasCueBall = false;
 
@@ -253,20 +266,18 @@ export function billardSimulation(dependencies) {
 	}
 
 
-
 	// ======================
-	// Setup and Run
+	// Setup - Create balls and Pass Callbacks to CanvasManager
 	// ======================
 	const balls = createRhombusBalls();
-
-
 	createCueball();
-	//startAnimation();
+
+	const global = callbacks.global;
 
 	balls.forEach(shape => addShape(shape));
-	callbacks.global.push(() => createPockets(ctx));
-	callbacks.global.push(() => createFrame(ctx));
-	callbacks.global.push(() => createPocketsCutouts(ctx));
+	global.push(() => createPockets(ctx));
+	global.push(() => createFrame(ctx));
+	global.push(() => createPocketsCutouts(ctx));
 	callbacks.shape.push(checkPocketCollision(pocketPositions, pR));
 	callbacks.shape.push(updateAimLine);
 }
@@ -274,7 +285,6 @@ export function billardSimulation(dependencies) {
 // ======================
 // Depenedencies
 // ======================
-// requested from CanvasManager and used inhere
 billardSimulation.dependencies = {
 	ctx: 'ctx',
 	addShape: 'addShape',
