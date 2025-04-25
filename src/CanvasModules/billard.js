@@ -133,8 +133,8 @@ export function billardSimulation(dependencies) {
 	// animated
 	// balls passed to shape for collisionCheck and -handling
 	function getCueBallVelocity() {
-		const angleDeg = parseFloat(angleInput.value);
-		const power = parseFloat(powerInput.value);
+		const angleDeg = +angleInput.value;
+		const power = +powerInput.value;
 		const angleRad = angleDeg * (Math.PI / 180);
 		const SPEED_MULTIPLIER = .2;
 
@@ -145,8 +145,8 @@ export function billardSimulation(dependencies) {
 	}
 	// new cueball position
 	function updateCueBallPosition() {
-		const x = parseFloat(cueXInput.value);
-		const y = parseFloat(cueYInput.value);
+		const x = +cueXInput.value;
+		const y = +cueYInput.value;
 console.log(x,y)
 		// cue ballwithin the left half of the table
 		if (x >= 0 && x <= canvas.width / 2 && y >= 0 && y <= canvas.height) {

@@ -112,15 +112,11 @@ class CanvasManager {
 			// Collision check (only with other shapes after this one)
 			for (let j = i + 1; j < shapes.length; j++) {
 				const shapeB = shapes[ j ];
-				// Calculate total kinetic energy
-				if (LOG) {
-					const totalKE = shape.getKineticEnergy()+ shapeB.getKineticEnergy();
-					console.log("Sum of shapes' ${i} and ${j} Kinetic Energy before collision:", totalKE.toFixed(2));
-				}
+
 				const collisionPoint = CollisionManager.resolveCollision(shape, shapeB);
-				if (LOG) {
+				if (LOG && collisionPoint) {
 					const totalKE = shape.getKineticEnergy() + shapeB.getKineticEnergy();
-					console.log("Sum of shapes' ${i} and ${j} Kinetic Energy after collision:", totalKE.toFixed(2));
+					console.log(`Sum of shapes' ${i} and ${j} Kinetic Energy after collision:`, totalKE.toFixed(2));
 				}
 				collisionPoint && collisionEffects?.handleCollisionPoint(collisionPoint, this.collisionPoints);
 
