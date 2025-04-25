@@ -48,11 +48,11 @@ class Shape {
 		const bbox = this.getBoundingBox();
 		if (bbox.minX < 0 + this.margin || bbox.maxX > canvas.width - this.margin) {
 			this.velocity.x *= -1;
-			this.position.x += Math.sign(this.velocity.x) * 3
+			this.position.x += Math.sign(this.velocity.x) * 1
 		}
 		if (bbox.minY < 0 + this.margin || bbox.maxY > canvas.height - this.margin) {
 			this.velocity.y *= -1;
-			this.position.y += Math.sign(this.velocity.y) * 3
+			this.position.y += Math.sign(this.velocity.y) * 1
 		}
 	}
 

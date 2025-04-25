@@ -4,7 +4,8 @@
 * Copyright(c) 2025 Barbara Kälin aka BarbWire - 1
 */
 
-import CollisionManager from "./ShapeCollisionManager.js";
+import CollisionManager from "../Collision/ShapeCollisionManager.js";
+import { collisionEffects } from "../Collision/CollisionEffects.js";
 // TODO in general add a single/double loop and only pass callbacks here???
 // TODO - compare performance on handling single/all - and usage of callbacks. LOTS of overhead
 
@@ -113,12 +114,12 @@ class CanvasManager {
 				const shapeB = shapes[ j ];
 				const collisionPoint = CollisionManager.resolveCollision(shape, shapeB);
 
-				collisionPoint && this.handleCollisionPoint(collisionPoint);
+				collisionPoint && collisionEffects?.handleCollisionPoint(collisionPoint, this.collisionPoints);
 
 			}
 		}
 		// => draw collisionMarks for lifetime, then delete point
-		this.handleCollisionPointsLifeCycle();
+		collisionEffects?.handleCollisionPointsLifeCycle(this.ctx, this.collisionPoints);
 
 		// Calculate total kinetic energy
 		if (LOG) {
@@ -127,61 +128,7 @@ class CanvasManager {
 		}
 		this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
 	}
-	// JUST debug - could also outsource
-	// create a star at point as long as stored
-	handleCollisionPoint(collisionPoint) {
-		const key = collisionPoint;
-		if (!this.collisionPoints.has(key)) {
-			this.collisionPoints.set(key, {
-				key: collisionPoint,
-				shape: this.generateStar(collisionPoint,
-					6 + Math.floor(Math.random() * 4),
-					6,
-					15
-				),
-				lifetime: 5
-			});
-		}
-	}
 
-	handleCollisionPointsLifeCycle() {
-		// Clean up collision points and draw effects
-		this.collisionPoints.forEach((cp, key) => {
-			cp.lifetime--;
-			if (cp.lifetime <= 0) {
-				this.collisionPoints.delete(key);
-			} else {
-				this.ctx.beginPath();
-				cp.shape.forEach((point, index) => {
-					if (index === 0) {
-						this.ctx.moveTo(point.x, point.y);
-					} else {
-						this.ctx.lineTo(point.x, point.y);
-					}
-				});
-				this.ctx.closePath();
-				this.ctx.strokeStyle = "yellow";
-				this.ctx.lineWidth = 3;
-				this.ctx.stroke();
-				this.ctx.fillStyle = "red";
-				this.ctx.fill();
-			}
-		});
-	}
-
-	// generate star shape
-	generateStar(center, spikes, innerRadius, outerRadius) {
-		const points = [];
-		for (let i = 0; i < spikes * 2; i++) {
-			const angle = (Math.PI * i) / spikes;
-			const radius = i % 2 === 0 ? outerRadius : innerRadius;
-			points.push({
-				x: center.x + Math.cos(angle) * radius,
-				y: center.y + Math.sin(angle) * radius
-			});
-		}
-		return points;
-	}
 
 	startAnimation() {
 		if (this.isAnimating) return;

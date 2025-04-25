@@ -4,7 +4,7 @@
 * Copyright(c) 2025 Barbara Kälin aka BarbWire - 1
 */
 
-import { Circle } from "../Canvas/Shapes.js";
+import { Circle } from "../Collision/CollidingShapes.js";
 
 
 // TODO only pass ctx as arg and return all necessary for usage with handler!!!!
@@ -134,7 +134,7 @@ export function billardSimulation(dependencies) {
 	}
 
 	function drawAimLine(ctx, origin, angleDeg, power) {
-		
+
 		const angleRad = angleDeg * (Math.PI / 180);
 		const length = power * 3;
 		const endX = origin.x + Math.cos(angleRad) * length;
