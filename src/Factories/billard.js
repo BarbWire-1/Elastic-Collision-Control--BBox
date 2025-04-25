@@ -23,12 +23,9 @@ export function billardSimulation(dependencies) {
 	const {
 		ctx,
 		addShape,
-		initialDraw,
 		shapes,
-		stopAnimation,
-		animationCallbacks,
+		callbacks,
 		canvas,
-		startAnimation
 	} = dependencies;
 
 	// ======================
@@ -69,7 +66,7 @@ export function billardSimulation(dependencies) {
 	const shootBtn = document.getElementById('shootButton');
 
 	// stop and add new cueball
-const newShootBtn = document.getElementById("newShoot")
+	const newShootBtn = document.getElementById("newShoot")
 	// ======================
 	//  Event Listeners
 	// ======================
@@ -110,7 +107,7 @@ const newShootBtn = document.getElementById("newShoot")
 		const SPEED_MULTIPLIER = .2;
 
 		return {
-			x: Math.cos(angleRad)  * power * SPEED_MULTIPLIER,
+			x: Math.cos(angleRad) * power * SPEED_MULTIPLIER,
 			y: Math.sin(angleRad) * power * SPEED_MULTIPLIER
 		};
 	}
@@ -123,13 +120,13 @@ const newShootBtn = document.getElementById("newShoot")
 		if (x >= 0 && x <= canvas.width / 2 && y >= 0 && y <= canvas.height) {
 			if (cueBall) {
 				cueBall.position = { x, y };
-				initialDraw();
+
 			}
 		}
 	}
 	// drawn when setup angle and power before shoot
 	function updateAimLine() {
-		if ( !aiming) return;
+		if (!aiming) return;
 
 		const angle = parseFloat(angleInput.value);
 		const power = parseFloat(powerInput.value);
@@ -167,7 +164,7 @@ const newShootBtn = document.getElementById("newShoot")
 		cueBall.id = "cueBall";
 		addShape(cueBall);
 
-		initialDraw();
+		//initialDraw();
 		updateAimLine();
 	}
 
@@ -226,8 +223,8 @@ const newShootBtn = document.getElementById("newShoot")
 		for (let i = 0; i < shapes.length;) {
 			shapes[ i ].id === 'cueBall'
 				? shapes.splice(i, 1)// do NOT increment!!
-				:(shapes[ i ].velocity = { x: 0, y: 0 },i++);
-			}
+				: (shapes[ i ].velocity = { x: 0, y: 0 }, i++);
+		}
 
 		setTimeout(() => {
 			cueBallSetupDiv.style.display = 'flex';
@@ -261,11 +258,10 @@ const newShootBtn = document.getElementById("newShoot")
 	// Setup and Run
 	// ======================
 	const balls = createRhombusBalls();
-	const callbacks = animationCallbacks;
+
 
 	createCueball();
-
-	startAnimation();
+	//startAnimation();
 
 	balls.forEach(shape => addShape(shape));
 	callbacks.global.push(() => createPockets(ctx));
@@ -282,10 +278,7 @@ const newShootBtn = document.getElementById("newShoot")
 billardSimulation.dependencies = {
 	ctx: 'ctx',
 	addShape: 'addShape',
-	initialDraw: 'initialDraw',
 	shapes: 'shapes',
-	stopAnimation: 'stopAnimation',
-	startAnimation: 'startAnimation',
-	animationCallbacks: 'animationCallbacks',
+	animationCallbacks: 'callbacks',
 	canvas: 'canvas'
 };
