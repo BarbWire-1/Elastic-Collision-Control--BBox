@@ -279,6 +279,6 @@ billardSimulation.dependencies = {
 	ctx: 'ctx',
 	addShape: 'addShape',
 	shapes: 'shapes',
-	animationCallbacks: 'callbacks',
+	callbacks: 'animationCallbacks',
 	canvas: 'canvas'
 };

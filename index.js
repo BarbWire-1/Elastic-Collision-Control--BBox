@@ -33,6 +33,7 @@ const canvasHandler = new CanvasManager(canvas);
 // add billardSimulation
 canvasHandler.factories.push(billardSimulation);
 canvasHandler.init();
+canvasHandler.startAnimation()
 
 
 // BUTTON AND INPUT STUFF
