@@ -86,6 +86,12 @@ button:hover {
 	text-align: center;
 
 }
+#shootButtons {
+	width: 60vw;
+	display: flex;
+	flex-direction: row;
+justify-content: space-evenly;
+}
 
 input{
 	width: 100px;

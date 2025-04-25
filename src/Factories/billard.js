@@ -68,6 +68,8 @@ export function billardSimulation(dependencies) {
 	const powerInput = document.getElementById('power');
 	const shootBtn = document.getElementById('shootButton');
 
+	// stop and add new cueball
+const newShootBtn = document.getElementById("newShoot")
 	// ======================
 	//  Event Listeners
 	// ======================
@@ -81,6 +83,8 @@ export function billardSimulation(dependencies) {
 		hasCueBall = true;
 
 	});
+
+	newShootBtn.addEventListener('click', newShoot)
 	cueXInput.addEventListener('input', updateCueBallPosition);
 	cueYInput.addEventListener('input', updateCueBallPosition);
 
@@ -216,6 +220,23 @@ export function billardSimulation(dependencies) {
 		}
 	}
 
+	function newShoot() {
+		hasCueBall = false;
+
+		for (let i = 0; i < shapes.length;) {
+			shapes[ i ].id === 'cueBall'
+				? shapes.splice(i, 1)// do NOT increment!!
+				:(shapes[ i ].velocity = { x: 0, y: 0 },i++);
+			}
+
+		setTimeout(() => {
+			cueBallSetupDiv.style.display = 'flex';
+			createCueball();
+		}, 200);
+	}
+
+
+
 	function checkPocketCollision(pocketPositions, pocketRadius) {
 		return (shape, i) => {
 			for (const pocket of pocketPositions) {
@@ -224,23 +245,13 @@ export function billardSimulation(dependencies) {
 				const distance = Math.sqrt(dx * dx + dy * dy);
 				if (distance - 4 < pocketRadius) {
 					shapes.splice(i, 1);
-					if (shape.id === "cueBall") {
-						hasCueBall = false;
-						shapes.forEach(s => s.velocity = { x: 0, y: 0 });
-						setTimeout(() => {
-
-							cueBallSetupDiv.style.display = 'flex';
-							createCueball();
-
-
-						}, 500);
-
+					shape.id === "cueBall" && newShoot()
 					}
 					break;
 				}
 			}
 		};
-	}
+
 
 	// ======================
 	// Setup and Run
