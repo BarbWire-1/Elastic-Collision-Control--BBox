@@ -13,7 +13,7 @@
 // TODO look for nicer sound on hit (some drop in there not nicely to cut out)
 // TODO refactor -
 /**
- * - Make the collisionEffects part of collisionHandler, modules bring their effects
+ * - Make modules subscribe to effectsHandler
  * - Make more modular: modules can bring their own canvas or use a global one
  * - shapes to be stored per module and canvas to draw on.
  * - Add some kind of prop to define drawSequence over all
@@ -24,26 +24,33 @@ import { billardSimulation } from "./CanvasModules/billard.js";
 import CanvasManager from "./Canvas/CanvasManager.js";
 
 
-// global var, like DRAW_INFO for debugging purposes only
+// global variables - mainly debugginging purposes
 globalThis.LOG = false;
 globalThis.DRAW_INFO = false;
 globalThis.SPEED_MULTIPLIER = 1.0;
 
-
-// SET UP CANVAS
+// ====================
+// CANVAS SETUP
+// ====================
 const canvas = document.getElementById("canvas");
 canvas.width = 800;
 canvas.height = 500;
 
 // CANVASHANDLER
 const canvasHandler = new CanvasManager(canvas);
-// add billardSimulation
+// add modules to canvas - here billardSimulation
 canvasHandler.modules.push(billardSimulation);
-canvasHandler.init();
-canvasHandler.startAnimation()
+canvasHandler.init();// initialises dependencies of modules and first static draw
 
+// start animationLoop
+canvasHandler.startAnimation();
 
+//--------------------------------------------------------------------------------------------------
+
+// ======================
 // BUTTON AND INPUT STUFF
+// ======================
+// - for logs, info and animationHandling
 const button = document.getElementById("toggleButton");
 
 function toggleAnimation() {
