@@ -1,18 +1,21 @@
+// SOUNDS: https://pixabay.com/sound-effects/search/snooker/
 
-
-const collisionEffects = {
+const Effects = {
 	shape: "star",
 	sounds: {
-		hit: "../../assets/sounds/billard-hit-sound.mp3", putCueBall: "../../assets/sounds/billard-cue-on-table.mp3", put: "../assets/sounds/billard-put.mp3" },
+		hit: "../../assets/sounds/billard-hit-sound.mp3",
+		putCueBall: "../../assets/sounds/billard-cue-on-table.mp3",
+		put: "../assets/sounds/billard-put.mp3"
+	},
 	activeSounds: [],
 	maxActiveSounds: 3, // max number of sounds (avoid chaos)
 	// create a star at point as long as stored
-	handleCollisionPoint(collisionPoint, collisionPoints) {
+	createEffects(collisionPoint, collisionPoints) {
 		const key = collisionPoint;
 		if (!collisionPoints.has(key)) {
 			collisionPoints.set(key, {
 				key: collisionPoint,
-				shape: collisionEffects.generateStar(collisionPoint,
+				shape: Effects.generateStar(collisionPoint,
 					6 + Math.floor(Math.random() * 4),
 					6,
 					15
@@ -20,16 +23,16 @@ const collisionEffects = {
 				lifetime: 5
 			});
 		}
-		collisionEffects.playsound(this.sounds.hit)
+		Effects.playsound(this.sounds.hit)
 	},
 
-	handleCollisionPointsLifeCycle(ctx, collisionPoints) {
+	handleEffectsLifeCycle(ctx, collisionPoints) {
 		// Clean up collision points and draw effects
 		collisionPoints.forEach((cp, key) => {
 			cp.lifetime--;
 			cp.lifetime <= 0
 				? collisionPoints.delete(key)
-				: collisionEffects.drawStar(ctx, cp)
+				: Effects.drawStar(ctx, cp)
 
 		});
 	},
@@ -94,4 +97,4 @@ const collisionEffects = {
 	}
 }
 
-export { collisionEffects }
+export { Effects}

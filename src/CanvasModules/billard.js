@@ -5,7 +5,7 @@
 */
 
 import { Circle } from "../Collision/CollidingShapes.js";
-import { collisionEffects } from '../Collision/CollisionEffects.js';
+import { Effects } from '../Collision/CollisionEffects.js';
 
 
 
@@ -248,7 +248,7 @@ export function billardSimulation(dependencies) {
 	// stop all balls and create new cueBall
 	function newShoot() {
 		hasCueBall = false;
-		collisionEffects.playsound(collisionEffects.sounds.putCueBall)
+		Effects.playsound(Effects.sounds.putCueBall)
 
 		for (let i = 0; i < shapes.length;) {
 			shapes[ i ].id === 'cueBall'
@@ -272,7 +272,7 @@ export function billardSimulation(dependencies) {
 				const distance = Math.sqrt(dx * dx + dy * dy);
 
 				if (distance < pocketRadius + 10) {
-					collisionEffects.playsound(collisionEffects.sounds.put)
+					Effects.playsound(Effects.sounds.put)
 					shapes.splice(i, 1);
 					if (shape.id === "cueBall") {
 						newShoot();

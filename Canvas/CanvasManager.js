@@ -5,7 +5,7 @@
 */
 
 import CollisionManager from "../src/Collision/ShapeCollisionManager.js";
-import { collisionEffects } from "../src/Collision/CollisionEffects.js";
+import { Effects } from "../src/Collision/CollisionEffects.js";
 // TODO in general add a single/double loop and only pass callbacks here???
 // TODO - compare performance on handling single/all - and usage of callbacks. LOTS of overhead
 
@@ -118,12 +118,12 @@ class CanvasManager {
 					const totalKE = shape.getKineticEnergy() + shapeB.getKineticEnergy();
 					console.log(`Sum of shapes' ${i} and ${j} Kinetic Energy after collision:`, totalKE.toFixed(2));
 				}
-				collisionPoint && collisionEffects?.handleCollisionPoint(collisionPoint, this.collisionPoints);
+				collisionPoint && Effects?.createEffects(collisionPoint, this.collisionPoints);
 
 			}
 		}
 		// => draw collisionMarks for lifetime, then delete point
-		collisionEffects?.handleCollisionPointsLifeCycle(this.ctx, this.collisionPoints);
+		Effects?.handleEffectsLifeCycle(this.ctx, this.collisionPoints);
 
 		// Calculate total kinetic energy
 		if (LOG) {
