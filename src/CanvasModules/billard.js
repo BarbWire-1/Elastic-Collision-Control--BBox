@@ -5,7 +5,8 @@
 */
 
 import { Circle } from "../Collision/CollidingShapes.js";
-import { Effects } from '../Collision/CollisionEffects.js';
+import { Effects } from '../Canvas/Effects.js';
+
 
 
 
@@ -13,7 +14,16 @@ import { Effects } from '../Collision/CollisionEffects.js';
 // TODO go with the dependency approach? - test adding another layer of coordinating drawSequence
 // TODO - add dumping/friction?
 // or keep as is for elastic collision demonstartion?
-
+// ======================
+// Depenedencies
+// ======================
+billardSimulation.dependencies = {
+	ctx: 'ctx',
+	addShape: 'addShape',
+	shapes: 'shapes',
+	callbacks: 'animationCallbacks',
+	canvas: 'canvas'
+};
 
 
 export function billardSimulation(dependencies) {
@@ -154,7 +164,7 @@ export function billardSimulation(dependencies) {
 		// cue ballwithin the left half of the table
 		if (x >= 0 && x <= canvas.width / 2 && y >= 0 && y <= canvas.height) {
 
-				cueBall.position = { x, y };
+			cueBall.position = { x, y };
 
 
 		}
@@ -234,6 +244,46 @@ export function billardSimulation(dependencies) {
 		}
 		return rhombusBalls;
 	}
+	// ======================
+	//  Effects
+	// ======================
+	// // Provide specific sounds and draw functions to Effects
+	Effects.setup({
+		sounds: {
+			hit: "../../assets/sounds/billard-hit-sound.mp3",
+			putCueBall: "../../assets/sounds/billard-cue-on-table.mp3",
+			put: "../assets/sounds/billard-put.mp3"
+		},
+		drawEffect: (ctx, cp) => {
+			ctx.beginPath();
+			cp.shape.forEach((point, index) => {
+				index === 0
+					? ctx.moveTo(point.x, point.y)
+					: ctx.lineTo(point.x, point.y);
+			});
+			ctx.closePath();
+			ctx.strokeStyle = "yellow";
+			ctx.lineWidth = 3;
+			ctx.stroke();
+			ctx.fillStyle = "red";
+			ctx.fill();
+		},
+		generateShape: (center) => {
+			const spikes = 6 + Math.floor(Math.random() * 4);
+			const innerRadius = 6;
+			const outerRadius = 15;
+			const points = [];
+			for (let i = 0; i < spikes * 2; i++) {
+				const angle = (Math.PI * i) / spikes;
+				const radius = i % 2 === 0 ? outerRadius : innerRadius;
+				points.push({
+					x: center.x + Math.cos(angle) * radius,
+					y: center.y + Math.sin(angle) * radius
+				});
+			}
+			return points;
+		}
+	});
 
 	// play
 	function shootCueBall() {
@@ -243,7 +293,7 @@ export function billardSimulation(dependencies) {
 		cueBallSetupDiv.style.display = 'none';// hide if ball in game
 		hasCueBall = true;
 
-}
+	}
 
 	// stop all balls and create new cueBall
 	function newShoot() {
@@ -299,14 +349,3 @@ export function billardSimulation(dependencies) {
 	callbacks.shape.push(checkPocketCollision(pocketPositions, pR));
 	callbacks.shape.push(updateAimLine);
 }
-
-// ======================
-// Depenedencies
-// ======================
-billardSimulation.dependencies = {
-	ctx: 'ctx',
-	addShape: 'addShape',
-	shapes: 'shapes',
-	callbacks: 'animationCallbacks',
-	canvas: 'canvas'
-};

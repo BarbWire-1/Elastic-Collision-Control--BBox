@@ -21,7 +21,7 @@
 
 //TODO - check performance (overhead!) when bundled!!!!
 import { billardSimulation } from "./CanvasModules/billard.js";
-import CanvasManager from "../Canvas/CanvasManager.js";
+import CanvasManager from "./Canvas/CanvasManager.js";
 
 
 // global var, like DRAW_INFO for debugging purposes only
