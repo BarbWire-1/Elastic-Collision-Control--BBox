@@ -10,11 +10,17 @@
 
 
 //TODO - change animationCallbacks to handle global/shape/ shape-otherShape and call in animate where structure fits!
-// TODO refactor and separate this "billard" playstuff to splice into canvasManager
+// TODO refactor -
+/**
+ * - Make the collisionEffects part of collisionHandler, modules bring their effects
+ * - Make more modular: modules can bring their own canvas or use a global one
+ * - shapes to be stored per module and canvas to draw on.
+ * - Add some kind of prop to define drawSequence over all
+*/
 
 //TODO - check performance (overhead!) when bundled!!!!
-import { billardSimulation } from "./src/CanvasModules/billard.js";
-import CanvasManager from "./src/Canvas/CanvasManager.js";
+import { billardSimulation } from "./CanvasModules/billard.js";
+import CanvasManager from "../Canvas/CanvasManager.js";
 
 
 // global var, like DRAW_INFO for debugging purposes only

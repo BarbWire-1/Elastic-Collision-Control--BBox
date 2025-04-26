@@ -4,8 +4,8 @@
 * Copyright(c) 2025 Barbara Kälin aka BarbWire - 1
 */
 
-import CollisionManager from "../Collision/ShapeCollisionManager.js";
-import { collisionEffects } from "../Collision/CollisionEffects.js";
+import CollisionManager from "../src/Collision/ShapeCollisionManager.js";
+import { collisionEffects } from "../src/Collision/CollisionEffects.js";
 // TODO in general add a single/double loop and only pass callbacks here???
 // TODO - compare performance on handling single/all - and usage of callbacks. LOTS of overhead
 

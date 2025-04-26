@@ -1,6 +1,10 @@
+
+
 const collisionEffects = {
 	shape: "star",
-	sound: undefined,
+	sound: "../../assets/sounds/billard-hit-sound.mp3",
+	activeSounds: [],  // Track currently active sounds
+	maxActiveSounds: 3, // Max number of sounds allowed at once
 	// create a star at point as long as stored
 	handleCollisionPoint(collisionPoint, collisionPoints) {
 		const key = collisionPoint;
@@ -15,6 +19,7 @@ const collisionEffects = {
 				lifetime: 5
 			});
 		}
+		collisionEffects.playsound()
 	},
 
 	handleCollisionPointsLifeCycle(ctx, collisionPoints) {
@@ -27,6 +32,33 @@ const collisionEffects = {
 
 		});
 	},
+
+
+	playsound() {
+		// If max active sounds is reached, stop playing new sounds
+		if (this.activeSounds.length >= this.maxActiveSounds) return;
+
+		const audio = new Audio(this.sound);
+		this.activeSounds.push(audio); // Add to active sounds
+
+		audio.play().then(() => {
+			// Optionally do something after playback starts
+		}).catch((e) => {
+			console.warn("Sound playback failed:", e);
+		});
+
+		// Clean up after the sound ends
+		audio.addEventListener('ended', () => {
+			// Remove from active sounds when done
+			const index = this.activeSounds.indexOf(audio);
+			if (index > -1) {
+				this.activeSounds.splice(index, 1);
+			}
+		});
+	},
+
+
+
 
 	drawStar(ctx,cp) {
 		ctx.beginPath();
@@ -43,6 +75,7 @@ const collisionEffects = {
 		ctx.fillStyle = "red";
 		ctx.fill();
 	},
+
 
 	// DrawRules - make adjustable
 	// generate star shape
