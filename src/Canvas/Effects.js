@@ -40,8 +40,10 @@ const Effects = {
 		if (this.activeSounds.length >= this.maxActiveSounds) return;
 
 		const audio = new Audio(sound);
-		this.activeSounds.push(audio);
 
+		this.activeSounds.push(audio);
+		// TODO add this to effects passed!!! ugly, but working for now...
+		audio.volume = sound === "../../assets/sounds/billard-hit-sound.mp3" ? 0.2 : 1;
 		audio.play().catch((e) => {
 			console.warn("Sound playback failed:", e);
 		});
