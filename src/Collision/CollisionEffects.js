@@ -2,9 +2,10 @@
 
 const collisionEffects = {
 	shape: "star",
-	sound: "../../assets/sounds/billard-hit-sound.mp3",
-	activeSounds: [],  // Track currently active sounds
-	maxActiveSounds: 3, // Max number of sounds allowed at once
+	sounds: {
+		hit: "../../assets/sounds/billard-hit-sound.mp3", putCueBall: "../../assets/sounds/billard-cue-on-table.mp3", put: "../assets/sounds/billard-put.mp3" },
+	activeSounds: [],
+	maxActiveSounds: 3, // max number of sounds (avoid chaos)
 	// create a star at point as long as stored
 	handleCollisionPoint(collisionPoint, collisionPoints) {
 		const key = collisionPoint;
@@ -19,7 +20,7 @@ const collisionEffects = {
 				lifetime: 5
 			});
 		}
-		collisionEffects.playsound()
+		collisionEffects.playsound(this.sounds.hit)
 	},
 
 	handleCollisionPointsLifeCycle(ctx, collisionPoints) {
@@ -34,11 +35,11 @@ const collisionEffects = {
 	},
 
 
-	playsound() {
+	playsound(sound) {
 		// If max active sounds is reached, stop playing new sounds
 		if (this.activeSounds.length >= this.maxActiveSounds) return;
 
-		const audio = new Audio(this.sound);
+		const audio = new Audio(sound);
 		this.activeSounds.push(audio); // Add to active sounds
 
 		audio.play().then(() => {

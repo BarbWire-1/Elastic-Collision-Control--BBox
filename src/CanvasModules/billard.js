@@ -5,6 +5,9 @@
 */
 
 import { Circle } from "../Collision/CollidingShapes.js";
+import { collisionEffects } from '../Collision/CollisionEffects.js';
+
+
 
 
 // TODO go with the dependency approach? - test adding another layer of coordinating drawSequence
@@ -147,7 +150,7 @@ export function billardSimulation(dependencies) {
 	function updateCueBallPosition() {
 		const x = +cueXInput.value;
 		const y = +cueYInput.value;
-console.log(x,y)
+
 		// cue ballwithin the left half of the table
 		if (x >= 0 && x <= canvas.width / 2 && y >= 0 && y <= canvas.height) {
 
@@ -183,6 +186,7 @@ console.log(x,y)
 
 	function createCueball() {
 		if (hasCueBall) return;
+
 		aiming = true;
 		cueBall = new Circle({
 			position: { x: 100, y: canvas.height / 2 },
@@ -196,6 +200,7 @@ console.log(x,y)
 		cueBall.id = "cueBall";
 
 		addShape(cueBall);
+
 		updateAimLine();
 	}
 
@@ -243,6 +248,7 @@ console.log(x,y)
 	// stop all balls and create new cueBall
 	function newShoot() {
 		hasCueBall = false;
+		collisionEffects.playsound(collisionEffects.sounds.putCueBall)
 
 		for (let i = 0; i < shapes.length;) {
 			shapes[ i ].id === 'cueBall'
@@ -253,7 +259,7 @@ console.log(x,y)
 		setTimeout(() => {
 			cueBallSetupDiv.style.display = 'flex';
 			createCueball();
-		}, 200);
+		}, 400);
 	}
 
 
@@ -266,6 +272,7 @@ console.log(x,y)
 				const distance = Math.sqrt(dx * dx + dy * dy);
 
 				if (distance < pocketRadius + 10) {
+					collisionEffects.playsound(collisionEffects.sounds.put)
 					shapes.splice(i, 1);
 					if (shape.id === "cueBall") {
 						newShoot();

@@ -10,6 +10,7 @@
 
 
 //TODO - change animationCallbacks to handle global/shape/ shape-otherShape and call in animate where structure fits!
+// TODO look for nicer sound on hit (some drop in there not nicely to cut out)
 // TODO refactor -
 /**
  * - Make the collisionEffects part of collisionHandler, modules bring their effects
